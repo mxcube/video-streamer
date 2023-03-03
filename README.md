@@ -23,8 +23,6 @@ pip install .
 usage: video-streamer [-h] [-c CONFIG_FILE_PATH] [-tu TANGO_URI] [-hs HOST] [-p PORT] [-q QUALITY] [-of OUTPUT_FORMAT] [-id HASH]
                       [-d DEBUG]
 
-mxcube-web Backend server command line utility.
-
 options:
   -h, --help            show this help message and exit
   -c CONFIG_FILE_PATH, --config CONFIG_FILE_PATH
