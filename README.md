@@ -50,7 +50,11 @@ The configuration file format is JSON. A test image is used when the input_uri i
  
  MJPEG: http://localhost:8001/ui
 
+
 ```
+video-streamer -c config.json
+
+config.json:
 {
     "sources": {
         "0.0.0.0:8000": {
