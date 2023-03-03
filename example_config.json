@@ -1,0 +1,9 @@
+{
+    "sources": {
+        "0.0.0.0:8000": {
+            "input_uri": "test",
+            "quality": 4,
+            "format": "MPEG1"
+        }
+    }
+}
