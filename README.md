@@ -41,5 +41,33 @@ options:
                         Debug true or false
 ```
 
-    
+There is the possibility to use a configuration file instead of command line arguments. All 
+command line arguments except debug are ignored if a config file is used. The configuration 
+file also makes it possible to configure several sources while the command line only allows 
+configuration of a single source.
+
+#### Example configuration file (config.json):
+The configuration file format is JSON. A test image is used when the input_uri is set to "test".
+The example below creates one MPEG1 stream and one MJPEG stream from the test image. There is a
+defualt test/demo UI to see the video stream on http://localhost:<port>/ui. In this case:
+  
+ MPEG1: http://localhost:8000/ui
+ MJPEG: http://localhost:8001/ui
+
+```
+{
+    "sources": {
+        "0.0.0.0:8000": {
+            "input_uri": "test",
+            "quality": 4,
+            "format": "MPEG1"
+        },
+        "0.0.0.0:8000": {
+            "input_uri": "test",
+            "quality": 4,
+            "format": "MJPEG"
+        }
+    }
+}
+```
   
