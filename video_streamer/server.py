@@ -29,7 +29,10 @@ def create_mjpeg_app(config, host, port, debug):
     async def video_ui(request: Request):
         return templates.TemplateResponse(
             "index_mjpeg.html",
-            {"request": request, "source": f"http://localhost:{port}/video/{config.hash}"},
+            {
+                "request": request,
+                "source": f"http://localhost:{port}/video/{config.hash}",
+            },
         )
 
     @app.get(f"/video/{config.hash}")
@@ -53,8 +56,13 @@ def create_mpeg1_app(config, host, port, debug):
     app = FastAPI()
     manager = WebsocketHandler()
     streamer = FFMPGStreamer(config, host, port, debug)
+    ui_static_root = os.path.join(os.path.dirname(__file__), "ui/static")
     ui_template_root = os.path.join(os.path.dirname(__file__), "ui/template")
     templates = Jinja2Templates(directory=ui_template_root)
+
+    app.mount(
+        "/static", StaticFiles(directory=ui_static_root, html=True), name="static"
+    )
 
     @app.get("/ui", response_class=HTMLResponse)
     async def video_ui(request: Request):

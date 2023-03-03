@@ -12,6 +12,7 @@ class SourceConfiguration(BaseModel):
     format: str = Field("MPEG1", description="Output format MPEG1 or MJPEG")
     hash: str = Field("", description="Server url postfix/trail")
 
+
 class ServerConfiguration(BaseModel):
     sources: Dict[str, SourceConfiguration]
 
@@ -34,4 +35,3 @@ def get_config_from_file(fpath: str) -> Union[ServerConfiguration, None]:
 def get_config_from_dict(config_data: dict) -> Union[ServerConfiguration, None]:
     data = ServerConfiguration(**config_data)
     return data
-

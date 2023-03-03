@@ -41,7 +41,7 @@ def parse_args() -> None:
         "--port",
         dest="port",
         help="port",
-        default=8000,
+        default="8000",
     )
 
     opt_parser.add_argument(
@@ -85,16 +85,19 @@ def run() -> None:
     if args.config_file_path:
         config = get_config_from_file(args.config_file_path)
     else:
-        config = get_config_from_dict({
-            "sources": {
-                 "%s:%s" % (args.host, args.port): {
-                    "input_uri": args.tango_uri,
-                    "quality": args.quality,
-                    "format": args.output_format,
-                    "hash": args.hash
+        config = get_config_from_dict(
+            {
+                "sources": {
+                    "%s:%s"
+                    % (args.host, args.port): {
+                        "input_uri": args.tango_uri,
+                        "quality": args.quality,
+                        "format": args.output_format,
+                        "hash": args.hash,
                     }
                 }
-            })
+            }
+        )
 
     for uri, source_config in config.sources.items():
         host, port = uri.split(":")
@@ -106,6 +109,7 @@ def run() -> None:
             )
 
             server = uvicorn.Server(config=config)
+            server.run()
 
             p = multiprocessing.Process(
                 target=server.run,

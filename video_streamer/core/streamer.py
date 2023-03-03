@@ -68,8 +68,8 @@ class FFMPGStreamer(Streamer):
 
     def _start_ffmpeg(
         self,
-        size: tuple[float, float],
-        scale: tuple[float, float],
+        size: Tuple[float, float],
+        scale: Tuple[float, float],
         quality: int = 4,
         port: int = 8000,
     ) -> None:
@@ -128,7 +128,9 @@ class FFMPGStreamer(Streamer):
         else:
             camera = LimaCamera(self._config.input_uri, 0.02, False)
 
-        ffmpeg_p = self._start_ffmpeg(camera.size, (1, 1), self._port)
+        ffmpeg_p = self._start_ffmpeg(
+            camera.size, (1, 1), self._config.quality, self._port
+        )
 
         self._poll_image_p = multiprocessing.Process(
             target=camera.poll_image, args=(ffmpeg_p.stdin,)

@@ -1,5 +1,5 @@
 # video-streamer
-Video streamer to be used with MXCuBE. The streamer currently suports streaming from Tango (Lima) devices but can be extened to used with other camera solutons. The output streams are either MJPEG or MPEG1.
+Video streamer to be used with MXCuBE. The streamer currently suports streaming from Tango (Lima) devices but can be extened to used with other camera solutons aswell. The output streams are either MJPEG or MPEG1.
 
 ![Screenshot from 2023-03-03 14-36-02](https://user-images.githubusercontent.com/4331447/222733892-c7d3af26-26ca-4a3c-b9f4-ab56fc91e390.png)
 
