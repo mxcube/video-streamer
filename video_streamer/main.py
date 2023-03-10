@@ -1,4 +1,3 @@
-import os
 import uvicorn
 import argparse
 import multiprocessing
@@ -82,6 +81,11 @@ def parse_args() -> None:
 def run() -> None:
     args = parse_args()
 
+    if not args.debug:
+        loglevel = "critical"
+    else:
+        loglevel = "info"
+
     if args.config_file_path:
         config = get_config_from_file(args.config_file_path)
     else:
@@ -105,7 +109,12 @@ def run() -> None:
 
         if app:
             config = uvicorn.Config(
-                app, host=host, port=int(port), reload=False, workers=1
+                app,
+                host=host,
+                port=int(port),
+                reload=False,
+                workers=1,
+                log_level=loglevel,
             )
 
             server = uvicorn.Server(config=config)
