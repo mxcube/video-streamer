@@ -1,6 +1,7 @@
 import subprocess
 import multiprocessing
 import queue
+from typing import Tuple
 
 from video_streamer.core.camera import TestCamera, LimaCamera
 from video_streamer.core.config import SourceConfiguration
@@ -87,12 +88,6 @@ class FFMPGStreamer(Streamer):
 
         ffmpeg_args = [
             "ffmpeg",
-            "-fflags",
-            "nobuffer",
-            "-fflags",
-            "discardcorrupt",
-            "-flags",
-            "low_delay",
             "-f",
             "rawvideo",
             "-pixel_format",
