@@ -9,7 +9,11 @@ import multiprocessing
 from typing import Union, IO, Tuple
 
 from PIL import Image
-from PyTango import DeviceProxy
+
+try:
+    from PyTango import DeviceProxy
+except ImportError:
+    logging.warning("PyTango not available.")
 
 
 class Camera:
