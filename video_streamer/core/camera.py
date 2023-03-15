@@ -5,6 +5,7 @@ import sys
 import os
 import io
 import multiprocessing
+import multiprocessing.queues
 
 from typing import Union, IO, Tuple
 
