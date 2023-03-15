@@ -28,7 +28,7 @@ pydantic = "^1.10.5"
 fastapi = "^0.92.0"
 pillow = "^9.4.0"
 uvicorn = "^0.20.0"
-pytango = "^9.3.0"
+pytango = { version = "^9.3.0", optional=true}
 jinja2 = "^3.1.2"
 websockets = "^10.4"
 
