@@ -54,9 +54,13 @@ class Camera:
     def size(self) -> Tuple[float, float]:
         return (self._width, self._height)
 
-    def get_jpeg(self, data) -> bytearray:
+    def get_jpeg(self, data, size=(0, 0)) -> bytearray:
         jpeg_data = io.BytesIO()
         image = Image.frombytes("RGB", self.size, data, "raw")
+
+        if size[0]:
+            image = image.resize(size)
+
         image.save(jpeg_data, format="JPEG")
         jpeg_data = jpeg_data.getvalue()
 

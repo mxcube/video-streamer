@@ -21,8 +21,9 @@ pip install .
 
 ### Usage
 ```
-usage: video-streamer [-h] [-c CONFIG_FILE_PATH] [-tu TANGO_URI] [-hs HOST] [-p PORT] [-q QUALITY] [-of OUTPUT_FORMAT] [-id HASH]
-                      [-d DEBUG]
+usage: video-streamer [-h] [-c CONFIG_FILE_PATH] [-tu TANGO_URI] [-hs HOST] [-p PORT] [-q QUALITY] [-s SIZE] [-of OUTPUT_FORMAT] [-id HASH] [-d]
+
+mxcube-web Backend server command line utility.
 
 options:
   -h, --help            show this help message and exit
@@ -30,19 +31,24 @@ options:
                         Configuration file path
   -tu TANGO_URI, --tango-uri TANGO_URI
                         Tango device URI
-  -hs HOST, --host-name HOST
-                        host
-  -p PORT, --port PORT  port
+  -hs HOST, --host HOST
+                        Host name to listen on for incomming client connections defualt (0.0.0.0)
+  -p PORT, --port PORT  Port
   -q QUALITY, --quality QUALITY
                         Compresion rate/quality
+  -s SIZE, --size SIZE  size
   -of OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
                         output format, MPEG1 or MJPEG1
   -id HASH, --id HASH   Sream id
-  -d DEBUG, --debug DEBUG
-                        Debug true or false
+  -d, --debug           Debug true or false
 ```
 
 There is the possibility to use a configuration file instead of command line arguments. All  command line arguments except debug are ignored if a config file is used. The configuration  file also makes it possible to configure several sources while the command line only allows  configuration of a single source.
+
+### Example command line (for testing):
+```
+video-streamer -d -of MPEG1 -tu test
+```
 
 #### Example configuration file (config.json):
 The configuration file format is JSON. A test image is used when the input_uri is set to "test". The example below creates one MPEG1 stream and one MJPEG stream from the test image. There is a defualt test/demo UI to see the video stream on http://localhost:[port]/ui. In example below case:
