@@ -29,9 +29,9 @@ def parse_args() -> None:
 
     opt_parser.add_argument(
         "-hs",
-        "--host-name",
+        "--host",
         dest="host",
-        help="host",
+        help="Host name to listen on for incomming client connections defualt (0.0.0.0)",
         default="0.0.0.0",
     )
 
@@ -39,7 +39,7 @@ def parse_args() -> None:
         "-p",
         "--port",
         dest="port",
-        help="port",
+        help="Port",
         default="8000",
     )
 
@@ -49,6 +49,14 @@ def parse_args() -> None:
         dest="quality",
         help="Compresion rate/quality",
         default=4,
+    )
+
+    opt_parser.add_argument(
+        "-s",
+        "--size",
+        dest="size",
+        help="size",
+        default="0, 0",
     )
 
     opt_parser.add_argument(
@@ -70,6 +78,7 @@ def parse_args() -> None:
     opt_parser.add_argument(
         "-d",
         "--debug",
+        action="store_true",
         dest="debug",
         help="Debug true or false",
         default=False,
@@ -98,6 +107,7 @@ def run() -> None:
                         "quality": args.quality,
                         "format": args.output_format,
                         "hash": args.hash,
+                        "size": args.size.split(","),
                     }
                 }
             }

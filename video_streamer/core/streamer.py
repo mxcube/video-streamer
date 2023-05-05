@@ -41,6 +41,8 @@ class MJPEGStreamer(Streamer):
 
         last_frame = _q.get()
 
+        out_size = self._config.size if self._config.size[0] else self._camera.size
+
         while True:
             try:
                 _data = _q.get_nowait()
@@ -52,7 +54,7 @@ class MJPEGStreamer(Streamer):
             yield (
                 b"--frame\r\n"
                 b"--!>\nContent-type: image/jpeg\n\n"
-                + self._camera.get_jpeg(last_frame)
+                + self._camera.get_jpeg(last_frame, out_size)
                 + b"\r\n"
             )
 
@@ -69,8 +71,8 @@ class FFMPGStreamer(Streamer):
 
     def _start_ffmpeg(
         self,
-        size: Tuple[float, float],
-        scale: Tuple[float, float],
+        source_size: Tuple[int, int],
+        out_size: Tuple[int, int],
         quality: int = 4,
         port: int = 8000,
     ) -> None:
@@ -78,13 +80,15 @@ class FFMPGStreamer(Streamer):
         Start encoding with ffmpeg and stream the video with the node
         websocket relay.
 
-        :param str scale: Video width and height
+        :param tuple source_size: Video size at source, width, height
+        :param tuple out_size: Output size (scaling), width, height
+        :param int quality: Quality (compression) option to pass to FFMPEG
+        :param int port: Port (on localhost) to send stream to
         :returns: Processes performing encoding
         :rtype: tuple
         """
-
-        size = "%sx%s" % size
-        w, h = scale
+        source_size = "%s:%s" % source_size
+        out_size = "%s:%s" % out_size
 
         ffmpeg_args = [
             "ffmpeg",
@@ -93,13 +97,15 @@ class FFMPGStreamer(Streamer):
             "-pixel_format",
             "rgb24",
             "-s",
-            size,
+            source_size,
             "-i",
             "-",
             "-f",
             "mpegts",
             "-q:v",
             "%s" % quality,
+            "-vf",
+            "scale=%s" % out_size,
             "-vcodec",
             "mpeg1video",
             "http://127.0.0.1:%s/video_input/" % port,
@@ -123,8 +129,10 @@ class FFMPGStreamer(Streamer):
         else:
             camera = LimaCamera(self._config.input_uri, 0.02, False)
 
+        out_size = self._config.size if self._config.size[0] else camera.size
+
         ffmpeg_p = self._start_ffmpeg(
-            camera.size, (1, 1), self._config.quality, self._port
+            camera.size, out_size, self._config.quality, self._port
         )
 
         self._poll_image_p = multiprocessing.Process(
