@@ -2,7 +2,7 @@ import logging
 import os
 import json
 
-from typing import Dict, Union
+from typing import Dict, Union, Tuple
 from pydantic import BaseModel, Field, ValidationError
 
 
@@ -11,7 +11,7 @@ class SourceConfiguration(BaseModel):
     quality: int = Field(4, description="FFMpeg Quality")
     format: str = Field("MPEG1", description="Output format MPEG1 or MJPEG")
     hash: str = Field("", description="Server url postfix/trail")
-    size: tuple[int, int] = Field((0, 0), description="Image size")
+    size: Tuple[int, int] = Field((0, 0), description="Image size")
 
 
 class ServerConfiguration(BaseModel):
