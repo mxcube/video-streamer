@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "video_streamer"
-version = "0.0.0"
+name = "mxcube_video_streamer"
+version = "1.0.0"
 packages = [{include = "video_streamer"}]
 license = "MIT"
-description = "FastApi Based video streamer"
+description = "FastAPI Based video streamer"
 authors = ["Marcus Oskarsson <oscarsso@esrf.fr>"]
 maintainers = [
     "Marcus Oskarsson <oscarsso@esrf.fr>",
