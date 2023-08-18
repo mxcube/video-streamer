@@ -128,7 +128,6 @@ def run() -> None:
             )
 
             server = uvicorn.Server(config=config)
-            server.run()
 
             p = multiprocessing.Process(
                 target=server.run,
