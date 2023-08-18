@@ -120,7 +120,7 @@ def run() -> None:
         if app:
             config = uvicorn.Config(
                 app,
-                host=host,
+                host="0.0.0.0",
                 port=int(port),
                 reload=False,
                 workers=1,
