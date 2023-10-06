@@ -128,12 +128,12 @@ def run() -> None:
             )
 
             server = uvicorn.Server(config=config)
+            server.run()
+            # p = multiprocessing.Process(
+            #    target=server.run,
+            # )
 
-            p = multiprocessing.Process(
-                target=server.run,
-            )
-
-            p.start()
+            # p.start()
 
 
 if __name__ == "__main__":
