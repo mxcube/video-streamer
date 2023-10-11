@@ -7,9 +7,7 @@ from video_streamer.core.config import get_config_from_dict, get_config_from_fil
 
 
 def parse_args() -> None:
-    opt_parser = argparse.ArgumentParser(
-        description="mxcube-web Backend server command line utility."
-    )
+    opt_parser = argparse.ArgumentParser(description="mxcube video streamer")
 
     opt_parser.add_argument(
         "-c",
