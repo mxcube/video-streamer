@@ -111,7 +111,7 @@ class LimaCamera(Camera):
             self._write_data(self._raw_data)
             self._last_frame_number = frame_number
 
-        # time.sleep(self._sleep_time)
+        time.sleep(self._sleep_time / 2)
 
 
 class TestCamera(Camera):

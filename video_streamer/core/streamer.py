@@ -1,6 +1,7 @@
 import subprocess
 import multiprocessing
 import queue
+import sleep
 from typing import Tuple
 
 from video_streamer.core.camera import TestCamera, LimaCamera
@@ -25,11 +26,12 @@ class MJPEGStreamer(Streamer):
     def __init__(self, config: SourceConfiguration, host: str, port: int, debug: bool):
         super().__init__(config, host, port, debug)
         self._poll_image_p = None
+        self._expt = 0.05
 
         if self._config.input_uri == "test":
-            self._camera = TestCamera("TANGO_URI", 0.02, False)
+            self._camera = TestCamera("TANGO_URI", self._expt, False)
         else:
-            self._camera = LimaCamera(self._config.input_uri, 0.02, False)
+            self._camera = LimaCamera(self._config.input_uri, self._expt, False)
 
     def start(self) -> None:
         _q = multiprocessing.Queue(1)
@@ -57,6 +59,8 @@ class MJPEGStreamer(Streamer):
                 + self._camera.get_jpeg(last_frame, out_size)
                 + b"\r\n"
             )
+
+            sleep.time(self._expt)
 
     def stop(self) -> None:
         if self._poll_image_p:
