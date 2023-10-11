@@ -117,7 +117,7 @@ class LimaCamera(Camera):
 class TestCamera(Camera):
     def __init__(self, device_uri: str, sleep_time: int, debug: bool = False):
         super().__init__(device_uri, sleep_time, debug)
-        self._sleep_time = 0.02
+        self._sleep_time = 0.05
         testimg_fpath = os.path.join(os.path.dirname(__file__), "fakeimg.jpg")
         self._im = Image.open(testimg_fpath, "r")
 
