@@ -4,7 +4,7 @@ import queue
 import time
 from typing import Tuple
 
-from video_streamer.core.camera import TestCamera, LimaCamera
+from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera
 from video_streamer.core.config import SourceConfiguration
 
 
@@ -30,6 +30,8 @@ class MJPEGStreamer(Streamer):
 
         if self._config.input_uri == "test":
             self._camera = TestCamera("TANGO_URI", self._expt, False)
+        elif self._config.input_uri.startswith("http"):
+            self._camera = MJPEGCamera(self._config.input_uri, self._expt, False)
         else:
             self._camera = LimaCamera(self._config.input_uri, self._expt, False)
 
@@ -129,6 +131,8 @@ class FFMPGStreamer(Streamer):
     def start(self) -> None:
         if self._config.input_uri == "test":
             camera = TestCamera("TANGO_URI", 0.02, False)
+        elif self._config.input_uri.startswith("http"):
+            self._camera = MJPEGCamera(self._config.input_uri, self._expt, False)
         else:
             camera = LimaCamera(self._config.input_uri, 0.02, False)
 

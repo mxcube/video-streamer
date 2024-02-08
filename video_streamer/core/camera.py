@@ -6,6 +6,7 @@ import os
 import io
 import multiprocessing
 import multiprocessing.queues
+import requests
 
 from typing import Union, IO, Tuple
 
@@ -65,6 +66,32 @@ class Camera:
         jpeg_data = jpeg_data.getvalue()
 
         return jpeg_data
+
+
+class MJPEGCamera(Camera):
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False):
+        super().__init__(device_uri, sleep_time, debug)
+
+    def poll_image(self, output: Union[IO, multiprocessing.queues.Queue]) -> None:
+        # auth=("user", "password")
+        r = requests.get(self._device_uri, stream=True)
+
+        buffer = bytes()
+        while True:
+            try:
+                if r.status_code == 200:
+                    for chunk in r.iter_content(chunk_size=1024):
+                        buffer += chunk
+
+                else:
+                    print("Received unexpected status code {}".format(r.status_code))
+            except requests.exceptions.StreamConsumedError:
+                output.put(buffer)
+                r = requests.get(self._device_uri, stream=True)
+                buffer = bytes()
+
+    def get_jpeg(self, data, size=None) -> bytearray:
+        return data
 
 
 class LimaCamera(Camera):
