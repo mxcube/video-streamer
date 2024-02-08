@@ -29,7 +29,9 @@ def parse_args() -> None:
         "-hs",
         "--host",
         dest="host",
-        help="Host name to listen on for incomming client connections defualt (0.0.0.0)",
+        help=(
+            "Host name to listen on for incomming client connections defualt (0.0.0.0)"
+        ),
         default="0.0.0.0",
     )
 
@@ -127,6 +129,7 @@ def run() -> None:
 
             server = uvicorn.Server(config=config)
             server.run()
+
 
 if __name__ == "__main__":
     run()
