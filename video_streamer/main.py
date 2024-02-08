@@ -18,9 +18,9 @@ def parse_args() -> None:
     )
 
     opt_parser.add_argument(
-        "-tu",
-        "--tango-uri",
-        dest="tango_uri",
+        "-uri",
+        "--uri",
+        dest="uri",
         help="Tango device URI",
         default="test",
     )
@@ -101,7 +101,7 @@ def run() -> None:
                 "sources": {
                     "%s:%s"
                     % (args.host, args.port): {
-                        "input_uri": args.tango_uri,
+                        "input_uri": args.uri,
                         "quality": args.quality,
                         "format": args.output_format,
                         "hash": args.hash,
