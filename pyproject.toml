@@ -11,7 +11,7 @@ maintainers = [
 readme = "README.md"
 homepage = "http://github.com/mxcube/fast-api-streamer"
 repository = "http://github.com/mxcube/fast-api-streamer"
-documentation = ""
+documentation = "http://github.com/mxcube/fast-api-streamer"
 keywords = ["mxcube", "fast-api-streamer", "video_streamer", "mxcubeweb"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
