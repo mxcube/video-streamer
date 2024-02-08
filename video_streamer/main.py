@@ -95,6 +95,9 @@ def run() -> None:
     else:
         loglevel = "info"
 
+    _size = tuple(map(float, args.size.split(",")))
+    _size = tuple(map(int, _size))
+
     if args.config_file_path:
         config = get_config_from_file(args.config_file_path)
     else:
@@ -107,7 +110,7 @@ def run() -> None:
                         "quality": args.quality,
                         "format": args.output_format,
                         "hash": args.hash,
-                        "size": args.size.split(","),
+                        "size": _size,
                     }
                 }
             }
