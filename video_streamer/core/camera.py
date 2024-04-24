@@ -160,6 +160,40 @@ class LimaCamera(Camera):
         time.sleep(self._sleep_time / 2)
 
 
+class RedisCamera(Camera):
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False):
+        super().__init__(device_uri, sleep_time, debug)
+
+        self._redis = self._connect(self._device_uri)
+        _, self._width, self._height, _ = self._get_image()
+        self._sleep_time = sleep_time
+        self._last_frame_number = -1
+        self._width = 1024
+        self._height = 1360
+
+    def _connect(self, device_uri: str):
+        return redis.Redis()
+
+    def _get_image(self) -> Tuple[bytearray, float, float, int]:
+        raw_data = self.redis.get("last_image_data")
+        frame_number = self.redis.get("last_image_id")
+        width, height = 1024, 1360
+
+        return raw_data, width, height, frame_number
+
+    def _poll_once(self) -> None:
+        frame_number = self.redis.get("last_image_id")
+
+        if self._last_frame_number != frame_number:
+            raw_data, width, height, frame_number = self._get_image()
+            self._raw_data = raw_data
+
+            self._write_data(self._raw_data)
+            self._last_frame_number = frame_number
+
+        time.sleep(self._sleep_time / 2)
+
+
 class TestCamera(Camera):
     def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
         super().__init__(device_uri, sleep_time, debug, redis, redis_channel)

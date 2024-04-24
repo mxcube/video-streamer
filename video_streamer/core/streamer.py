@@ -4,7 +4,7 @@ import queue
 import time
 from typing import Tuple
 
-from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, VideoTestCamera, Camera
+from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, VideoTestCamera, Camera, RedisCamera
 from video_streamer.core.config import SourceConfiguration
 
 
@@ -29,6 +29,8 @@ class Streamer:
             return VideoTestCamera("TANGO_URI", self._expt, False, self._config.redis, self._config.redis_channel)
         elif self._config.input_uri.startswith("http"):
             return MJPEGCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
+        elif self._config.input_uri.startswith("redis"):
+            return RedisCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
         
         return LimaCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
 
