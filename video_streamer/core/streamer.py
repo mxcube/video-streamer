@@ -4,7 +4,7 @@ import queue
 import time
 from typing import Tuple
 
-from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera
+from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, RedisCamera
 from video_streamer.core.config import SourceConfiguration
 
 
@@ -14,6 +14,18 @@ class Streamer:
         self._host = host
         self._port = port
         self._debug = debug
+
+    def get_camera(self):
+        if self._config.input_uri == "test":
+            camera = TestCamera("TANGO_URI", self._expt, False)
+        elif self._config.input_uri.startswith("http"):
+            camera = MJPEGCamera(self._config.input_uri, self._expt, False)
+        elif self._config.input_uri.startswith("redis"):
+            camera = RedisCamera(self._config.input_uri, self._expt, False)
+        else:
+            camera = LimaCamera(self._config.input_uri, self._expt, False)
+            
+        return camera
 
     def start(self) -> None:
         pass
@@ -27,13 +39,7 @@ class MJPEGStreamer(Streamer):
         super().__init__(config, host, port, debug)
         self._poll_image_p = None
         self._expt = 0.05
-
-        if self._config.input_uri == "test":
-            self._camera = TestCamera("TANGO_URI", self._expt, False)
-        elif self._config.input_uri.startswith("http"):
-            self._camera = MJPEGCamera(self._config.input_uri, self._expt, False)
-        else:
-            self._camera = LimaCamera(self._config.input_uri, self._expt, False)
+        self._camera = self.get_camera()
 
     def start(self) -> None:
         _q = multiprocessing.Queue(1)
@@ -73,6 +79,7 @@ class FFMPGStreamer(Streamer):
         super().__init__(config, host, port, debug)
         self._ffmpeg_process = None
         self._poll_image_p = None
+        self._expt = 0.02
 
     def _start_ffmpeg(
         self,
@@ -129,12 +136,7 @@ class FFMPGStreamer(Streamer):
         return ffmpeg
 
     def start(self) -> None:
-        if self._config.input_uri == "test":
-            camera = TestCamera("TANGO_URI", 0.02, False)
-        elif self._config.input_uri.startswith("http"):
-            self._camera = MJPEGCamera(self._config.input_uri, self._expt, False)
-        else:
-            camera = LimaCamera(self._config.input_uri, 0.02, False)
+        camera = self.get_camera()
 
         out_size = self._config.size if self._config.size[0] else camera.size
 
