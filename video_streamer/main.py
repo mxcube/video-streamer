@@ -4,7 +4,6 @@ import multiprocessing
 
 from video_streamer.server import create_app
 from video_streamer.core.config import get_config_from_dict, get_config_from_file
-from video_streamer.redisclient import run_redis_stream
 
 
 def parse_args() -> None:
@@ -111,11 +110,19 @@ def parse_args() -> None:
     )
 
     opt_parser.add_argument(
-        "-rk",
+        "-rc",
         "--redis-channel",
         dest= "redis_channel",
         help="Key for saving to redis database",
         default="video-streamer",
+    )
+
+    opt_parser.add_argument(
+        "-sf",
+        "--save-folder",
+        dest="save_folder",
+        help='Indicate if you want to save the video to a folder',
+        default="",
     )
 
     return opt_parser.parse_args()
@@ -135,25 +142,24 @@ def run() -> None:
     if args.config_file_path:
         config = get_config_from_file(args.config_file_path)
     else:
-        config_dict = {
-            "sources": {
-                "%s:%s"
-                % (args.host, args.port): {
-                    "input_uri": args.uri,
-                    "quality": args.quality,
-                    "format": args.output_format,
-                    "hash": args.hash,
-                    "size": _size,
+        config = get_config_from_dict(
+            {
+                "sources": {
+                    "%s:%s"
+                    % (args.host, args.port): {
+                        "input_uri": args.uri,
+                        "quality": args.quality,
+                        "format": args.output_format,
+                        "hash": args.hash,
+                        "size": _size,
+                        "save_folder": args.save_folder,
+                        "redis": "%s:%s" % (args.redis_host, args.redis_port) if args.redis else None,
+                        "redis_channel": args.redis_channel,
+                    }
                 }
             }
-        }
-
-        if args.redis:
-            config_dict["sources"]["%s:%s" % (args.host, args.port)]["redis"] = "%s:%s" % (args.redis_host, args.redis_port)
-            config_dict["sources"]["%s:%s" % (args.host, args.port)]["redis_channel"] = args.redis_channel
-        
-        config = get_config_from_dict(config_dict)
-
+        )
+    
     for uri, source_config in config.sources.items():
         host, port = uri.split(":")
 

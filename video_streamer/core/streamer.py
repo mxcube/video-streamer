@@ -29,11 +29,11 @@ class MJPEGStreamer(Streamer):
         self._expt = 0.05
 
         if self._config.input_uri == "test":
-            self._camera = TestCamera("TANGO_URI", self._expt, False, self._config.redis, self._config.redis_channel)
+            self._camera = TestCamera("TANGO_URI", self._expt, False, self._config.redis, self._config.redis_channel, self._config.save_folder)
         elif self._config.input_uri.startswith("http"):
-            self._camera = MJPEGCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
+            self._camera = MJPEGCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel, self._config.save_folder)
         else:
-            self._camera = LimaCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
+            self._camera = LimaCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel, self._config.save_folder)
 
     def start(self) -> None:
         _q = multiprocessing.Queue(1)
@@ -130,11 +130,11 @@ class FFMPGStreamer(Streamer):
 
     def start(self) -> None:
         if self._config.input_uri == "test":
-            camera = TestCamera("TANGO_URI", 0.02, False, self._config.redis, self._config.redis_channel)
+            camera = TestCamera("TANGO_URI", 0.02, False, self._config.redis, self._config.redis_channel, self._config.save_folder)
         elif self._config.input_uri.startswith("http"):
-            self._camera = MJPEGCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
+            self._camera = MJPEGCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel, self._config.save_folder)
         else:
-            camera = LimaCamera(self._config.input_uri, 0.02, False, self._config.redis, self._config.redis_channel)
+            camera = LimaCamera(self._config.input_uri, 0.02, False, self._config.redis, self._config.redis_channel, self._config.save_folder)
 
         out_size = self._config.size if self._config.size[0] else camera.size
 

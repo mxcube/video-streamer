@@ -20,7 +20,7 @@ except ImportError:
 
 
 class Camera:
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None, save_folder: str = None):
         self._device_uri = device_uri
         self._sleep_time = sleep_time
         self._debug = debug
@@ -29,6 +29,10 @@ class Camera:
         self._output = None
         self._redis = redis
         self._redis_channel = redis_channel
+        self._save_folder = save_folder
+
+        if self._save_folder and not os.path.exists(self._save_folder):
+            os.makedirs(self._save_folder)
 
     def _poll_once(self) -> None:
         pass
@@ -75,8 +79,8 @@ class Camera:
 
 
 class MJPEGCamera(Camera):
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
-        super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None, save_folder: str = None):
+        super().__init__(device_uri, sleep_time, debug, redis, redis_channel, save_folder)
 
     def poll_image(self, output: Union[IO, multiprocessing.queues.Queue]) -> None:
         # auth=("user", "password")
@@ -101,8 +105,8 @@ class MJPEGCamera(Camera):
 
 
 class LimaCamera(Camera):
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
-        super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None, save_folder: str = None):
+        super().__init__(device_uri, sleep_time, debug, redis, redis_channel, save_folder)
 
         self._lima_tango_device = self._connect(self._device_uri)
         _, self._width, self._height, _ = self._get_image()
@@ -146,22 +150,33 @@ class LimaCamera(Camera):
 
             if self._redis:
                 self._redis_client.publish(self._redis_channel, self._raw_data)
+            
+            if self._save_folder:
+                img = Image.frombytes("RGB", ( width, height ), raw_data, "raw")
+                img.save(os.path.join(self._save_folder, 'img'+ str(frame_number) + '.jpg'), format="JPEG")
 
         time.sleep(self._sleep_time / 2)
 
 
 class TestCamera(Camera):
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
-        super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None, save_folder: str = None):
+        super().__init__(device_uri, sleep_time, debug, redis, redis_channel, save_folder)
         self._sleep_time = 0.05
         testimg_fpath = os.path.join(os.path.dirname(__file__), "fakeimg.jpg")
         self._im = Image.open(testimg_fpath, "r")
-
+        self.counter = 0
         self._raw_data = self._im.convert("RGB").tobytes()
         self._width, self._height = self._im.size
 
     def _poll_once(self) -> None:
         self._write_data(self._raw_data)
+        
         if self._redis:
             self._redis_client.publish(self._redis_channel, self._raw_data)
+        
+        if self._save_folder:
+            img = Image.frombytes("RGB", self._im.size, self._raw_data, "raw")
+            img.save(os.path.join(self._save_folder, 'img'+ str(self.counter) + '.jpg'), format='JPEG')
+            self.counter+=1
+
         time.sleep(self._sleep_time)
