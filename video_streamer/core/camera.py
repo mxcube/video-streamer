@@ -7,6 +7,7 @@ import io
 import multiprocessing
 import multiprocessing.queues
 import requests
+import redis
 
 from typing import Union, IO, Tuple
 
@@ -19,13 +20,15 @@ except ImportError:
 
 
 class Camera:
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False):
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
         self._device_uri = device_uri
         self._sleep_time = sleep_time
         self._debug = debug
         self._width = -1
         self._height = -1
         self._output = None
+        self._redis = redis
+        self._redis_channel = redis_channel
 
     def _poll_once(self) -> None:
         pass
@@ -38,6 +41,9 @@ class Camera:
 
     def poll_image(self, output: Union[IO, multiprocessing.queues.Queue]) -> None:
         self._output = output
+        if self._redis:
+            host, port = self._redis.split(':')
+            self._redis_client = redis.StrictRedis(host=host, port=port)
 
         while True:
             try:
@@ -69,8 +75,8 @@ class Camera:
 
 
 class MJPEGCamera(Camera):
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False):
-        super().__init__(device_uri, sleep_time, debug)
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
+        super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
 
     def poll_image(self, output: Union[IO, multiprocessing.queues.Queue]) -> None:
         # auth=("user", "password")
@@ -95,8 +101,8 @@ class MJPEGCamera(Camera):
 
 
 class LimaCamera(Camera):
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False):
-        super().__init__(device_uri, sleep_time, debug)
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
+        super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
 
         self._lima_tango_device = self._connect(self._device_uri)
         _, self._width, self._height, _ = self._get_image()
@@ -138,12 +144,15 @@ class LimaCamera(Camera):
             self._write_data(self._raw_data)
             self._last_frame_number = frame_number
 
+            if self._redis:
+                self._redis_client.publish(self._redis_channel, self._raw_data)
+
         time.sleep(self._sleep_time / 2)
 
 
 class TestCamera(Camera):
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False):
-        super().__init__(device_uri, sleep_time, debug)
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
+        super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
         self._sleep_time = 0.05
         testimg_fpath = os.path.join(os.path.dirname(__file__), "fakeimg.jpg")
         self._im = Image.open(testimg_fpath, "r")
@@ -153,4 +162,6 @@ class TestCamera(Camera):
 
     def _poll_once(self) -> None:
         self._write_data(self._raw_data)
+        if self._redis:
+            self._redis_client.publish(self._redis_channel, self._raw_data)
         time.sleep(self._sleep_time)

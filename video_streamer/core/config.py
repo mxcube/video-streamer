@@ -12,6 +12,8 @@ class SourceConfiguration(BaseModel):
     format: str = Field("MPEG1", description="Output format MPEG1 or MJPEG")
     hash: str = Field("", description="Server url postfix/trail")
     size: Tuple[int, int] = Field((0, 0), description="Image size")
+    redis: str = Field(None, description="redis host and port (format host:port)")
+    redis_channel: str = Field("video-streamer", description="redis-channel to publish stream")
 
 
 class ServerConfiguration(BaseModel):
