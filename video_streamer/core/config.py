@@ -14,6 +14,7 @@ class SourceConfiguration(BaseModel):
     size: Tuple[int, int] = Field((0, 0), description="Image size")
     redis: str = Field(None, description="redis host and port (format host:port)")
     redis_channel: str = Field("video-streamer", description="redis-channel to publish stream")
+    save_folder: str = Field("", description="Folder to save video to")
 
 
 class ServerConfiguration(BaseModel):
