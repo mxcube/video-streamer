@@ -8,6 +8,9 @@ import multiprocessing
 import multiprocessing.queues
 import requests
 import redis
+import json
+import base64
+from datetime import datetime
 
 from typing import Union, IO, Tuple
 
@@ -145,7 +148,12 @@ class LimaCamera(Camera):
             self._last_frame_number = frame_number
 
             if self._redis:
-                self._redis_client.publish(self._redis_channel, self._raw_data)
+                frame_dict = {
+                    "data": base64.b64encode(self._raw_data).decode('utf-8'),
+                    "size": (width, height),
+                    "time": datetime.now().strftime("%H:%M:%S.%f")
+                }
+                self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
 
         time.sleep(self._sleep_time / 2)
 
@@ -162,6 +170,13 @@ class TestCamera(Camera):
 
     def _poll_once(self) -> None:
         self._write_data(self._raw_data)
+        
         if self._redis:
-            self._redis_client.publish(self._redis_channel, self._raw_data)
+            frame_dict = {
+                "data": base64.b64encode(self._raw_data).decode('utf-8'),
+                "size": self._im.size,
+                "time": datetime.now().strftime("%H:%M:%S.%f")
+            }
+            self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
+        
         time.sleep(self._sleep_time)
