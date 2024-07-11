@@ -4,7 +4,7 @@ import queue
 import time
 from typing import Tuple
 
-from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, RedisCamera
+from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, RedisCamera, VideoTestCamera
 from video_streamer.core.config import SourceConfiguration
 
 
