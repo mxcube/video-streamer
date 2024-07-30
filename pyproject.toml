@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<3.11"
+python = ">=3.7,<3.12"
 pydantic = "^1.10.5"
 fastapi = "^0.92.0"
 pillow = "^9.4.0"
