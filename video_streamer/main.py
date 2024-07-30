@@ -1,10 +1,8 @@
 import uvicorn
 import argparse
-import multiprocessing
 
 from video_streamer.server import create_app
 from video_streamer.core.config import get_config_from_dict, get_config_from_file
-from video_streamer.redisclient import run_redis_stream
 
 
 def parse_args() -> None:
