@@ -17,13 +17,15 @@ class Streamer:
 
     def get_camera(self):
         if self._config.input_uri == "test":
-            camera = TestCamera("TANGO_URI", self._expt, False)
+            camera = TestCamera("TANGO_URI", self._expt, False, self._config.redis, self._config.redis_channel)
+        elif self._config.input_uri == "videotest":
+            camera = VideoTestCamera("TANGO_URI", self._expt, False, self._config.redis, self._config.redis_channel)
         elif self._config.input_uri.startswith("http"):
-            camera = MJPEGCamera(self._config.input_uri, self._expt, False)
+            camera = MJPEGCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
         elif self._config.input_uri.startswith("redis"):
-            camera = RedisCamera(self._config.input_uri, self._expt, False)
+            camera = RedisCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
         else:
-            camera = LimaCamera(self._config.input_uri, self._expt, False)
+            camera = LimaCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
             
         return camera
 
