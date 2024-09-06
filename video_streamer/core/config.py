@@ -60,6 +60,11 @@ class SourceConfiguration(BaseModel):
         description="Redis-Channel to publish stream.",
         default="video-streamer",
     )
+    in_redis_channel: str = Field(
+        title="Input Redis Channel",
+        description= "Channel for RedisCamera to listen to",
+        default="CameraStream",
+    )
 
 
 class ServerConfiguration(BaseModel):

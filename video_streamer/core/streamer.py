@@ -23,7 +23,7 @@ class Streamer:
         elif self._config.input_uri.startswith("http"):
             camera = MJPEGCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
         elif self._config.input_uri.startswith("redis"):
-            camera = RedisCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
+            camera = RedisCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel, self._config.in_redis_channel)
         else:
             camera = LimaCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
             
