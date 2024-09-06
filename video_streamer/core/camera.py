@@ -12,6 +12,7 @@ import json
 import base64
 from datetime import datetime
 import cv2
+import numpy as np
 
 from typing import Union, IO, Tuple
 
@@ -161,38 +162,55 @@ class LimaCamera(Camera):
 
 
 class RedisCamera(Camera):
-    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False):
-        super().__init__(device_uri, sleep_time, debug)
-
-        self._redis = self._connect(self._device_uri)
-        _, self._width, self._height, _ = self._get_image()
-        self._sleep_time = sleep_time
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, out_redis: str = None, out_redis_channel: str = None, in_redis_channel: str = 'frames'):
+        super().__init__(device_uri, sleep_time, debug, out_redis, out_redis_channel)
+        # for this camera in_redis_... is for the input and redis_... as usual for output
+        self._in_redis_client = self._connect(self._device_uri)
         self._last_frame_number = -1
-        self._width = 1024
-        self._height = 1360
+        self._in_redis_channel = in_redis_channel
+        self._set_size()
+
+    def _set_size(self):
+        # the size is send via redis, hence we get the information from there
+        pubsub = self._in_redis_client.pubsub()
+        pubsub.subscribe(self._in_redis_channel)
+        while True:
+            message = pubsub.get_message()
+            if message and message["type"] == "message":
+                frame = json.loads(message["data"])
+                self._width = frame["size"][1]
+                self._height = frame["size"][0]
+                break
 
     def _connect(self, device_uri: str):
-        return redis.Redis()
+        host, port = device_uri.replace('redis://', '').split(':')
+        port = port.split('/')[0]
+        return redis.StrictRedis(host=host, port=port)
 
-    def _get_image(self) -> Tuple[bytearray, float, float, int]:
-        raw_data = self.redis.get("last_image_data")
-        frame_number = self.redis.get("last_image_id")
-        width, height = 1024, 1360
-
-        return raw_data, width, height, frame_number
-
-    def _poll_once(self) -> None:
-        frame_number = self.redis.get("last_image_id")
-
-        if self._last_frame_number != frame_number:
-            raw_data, width, height, frame_number = self._get_image()
-            self._raw_data = raw_data
-
-            self._write_data(self._raw_data)
-            self._last_frame_number = frame_number
-
-        time.sleep(self._sleep_time / 2)
-
+    def poll_image(self, output: Union[IO, multiprocessing.queues.Queue]) -> None:
+        pubsub = self._in_redis_client.pubsub()
+        pubsub.subscribe(self._in_redis_channel)
+        self._output = output
+        for message in pubsub.listen():
+            if message["type"] == "message":
+                frame = json.loads(message["data"])
+                self._last_frame_number += 1
+                if self._redis:
+                    frame_dict = {
+                        "data": frame["data"],
+                        "size": frame["size"],
+                        "time": datetime.now().strftime("%H:%M:%S.%f"),
+                        "frame_number": self._last_frame_number
+                    }
+                    self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
+                raw_image_data = base64.b64decode(frame["data"])
+                # ffmpeg needs an rgb encoded image, since we cannot be sure if the image was in rgb or 
+                # bgr(common for cv2 image manipulation) we need these transformations
+                image_array = np.frombuffer(raw_image_data, dtype=np.uint8)
+                frame = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                
+                self._write_data(rgb_frame.tobytes())
 
 class TestCamera(Camera):
     def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
@@ -247,10 +265,8 @@ class VideoTestCamera(Camera):
                 print("Failed to restart video capture.")
                 return
             
-        # Convert frame to PIL Image and get size
         frame_pil = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
         size = frame_pil.size        
-        # Convert PIL Image to bytes
         frame_bytes = frame_pil.tobytes()
         self._write_data(bytearray(frame_bytes))
 
