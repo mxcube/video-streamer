@@ -109,7 +109,7 @@ class ServerConfiguration(BaseModel):
         )
 
 
-def get_config_from_file(fpath: str | Path) -> Union[ServerConfiguration, None]:
+def get_config_from_file(fpath: Union[str, Path]) -> Union[ServerConfiguration, None]:
     """Get server configuration from file.
 
     Args:
