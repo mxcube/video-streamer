@@ -153,7 +153,8 @@ class LimaCamera(Camera):
                 frame_dict = {
                     "data": base64.b64encode(self._raw_data).decode('utf-8'),
                     "size": (width, height),
-                    "time": datetime.now().strftime("%H:%M:%S.%f")
+                    "time": datetime.now().strftime("%H:%M:%S.%f"),
+                    "frame_number": self._last_frame_number,
                 }
                 self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
 
@@ -193,11 +194,13 @@ class RedisCamera(Camera):
         for message in pubsub.listen():
             if message["type"] == "message":
                 frame = json.loads(message["data"])
+                self._last_frame_number += 1
                 if self._redis:
                     frame_dict = {
                         "data": frame["data"],
                         "size": frame["size"],
-                        "time": datetime.now().strftime("%H:%M:%S.%f")
+                        "time": datetime.now().strftime("%H:%M:%S.%f"),
+                        "frame_number": self._last_frame_number
                     }
                     self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
                 raw_image_data = base64.b64decode(frame["data"])
@@ -218,15 +221,17 @@ class TestCamera(Camera):
 
         self._raw_data = self._im.convert("RGB").tobytes()
         self._width, self._height = self._im.size
+        self._last_frame_number = -1
 
     def _poll_once(self) -> None:
         self._write_data(self._raw_data)
-        
+        self._last_frame_number += 1
         if self._redis:
             frame_dict = {
                 "data": base64.b64encode(self._raw_data).decode('utf-8'),
                 "size": self._im.size,
-                "time": datetime.now().strftime("%H:%M:%S.%f")
+                "time": datetime.now().strftime("%H:%M:%S.%f"),
+                "frame_number": self._last_frame_number,
             }
             self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
         
@@ -240,6 +245,7 @@ class VideoTestCamera(Camera):
         self._current = 0
         self._video_capture = cv2.VideoCapture(self._testvideo_fpath)
         self._set_video_dimensions()
+        self._last_frame_number = -1
 
     def _poll_once(self) -> None:
         if not self._video_capture.isOpened():
@@ -263,11 +269,13 @@ class VideoTestCamera(Camera):
         frame_bytes = frame_pil.tobytes()
         self._write_data(frame_bytes)
 
+        self._last_frame_number += 1
         if self._redis:
             frame_dict = {
                 "data": base64.b64encode(frame_bytes).decode('utf-8'),
                 "size": size,
-                "time": datetime.now().strftime("%H:%M:%S.%f")
+                "time": datetime.now().strftime("%H:%M:%S.%f"),
+                "frame_number": self._last_frame_number,
             }
             self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
         
