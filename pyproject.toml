@@ -29,7 +29,7 @@ pydantic-settings = ">=2.4.0"
 fastapi = "^0.112.1"
 pillow = "^10.4.0"
 uvicorn = "^0.30.6"
-pytango = { version = "^9.4.1", optional=true}
+pytango = {version = "^9.3.6", optional = true}
 jinja2 = "^3.1.4"
 websockets = "^12.0"
 
