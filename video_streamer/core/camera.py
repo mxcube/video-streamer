@@ -11,6 +11,7 @@ import redis
 import json
 import base64
 from datetime import datetime
+import cv2
 
 from typing import Union, IO, Tuple
 
@@ -184,3 +185,55 @@ class TestCamera(Camera):
             self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
         
         time.sleep(self._sleep_time)
+
+class VideoTestCamera(Camera):
+    def __init__(self, device_uri: str, sleep_time: int, debug: bool = False, redis: str = None, redis_channel: str = None):
+        super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
+        self._sleep_time = 0.04
+        # for your testvideo, please use an uncompressed video or mjpeg codec, 
+        # otherwise, opencv might have issues with reading the frames.
+        self._testvideo_fpath = os.path.join(os.path.dirname(__file__), "./test_video.avi")
+        self._current = 0
+        self._video_capture = cv2.VideoCapture(self._testvideo_fpath)
+        self._set_video_dimensions()
+        self._last_frame_number = -1
+
+    def _poll_once(self) -> None:
+        if not self._video_capture.isOpened():
+            print("Video capture is not opened.")
+            return
+        
+        ret, frame = self._video_capture.read()
+        if not ret:
+            # End of video, loop back to the beginning
+            self._video_capture.release()
+            self._video_capture = cv2.VideoCapture(self._testvideo_fpath)
+            ret, frame = self._video_capture.read()
+            if not ret:
+                print("Failed to restart video capture.")
+                return
+            
+        # Convert frame to PIL Image and get size
+        frame_pil = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        size = frame_pil.size        
+        # Convert PIL Image to bytes
+        frame_bytes = frame_pil.tobytes()
+        self._write_data(bytearray(frame_bytes))
+
+        if self._redis:
+            frame_dict = {
+                "data": base64.b64encode(frame_bytes).decode('utf-8'),
+                "size": size,
+                "time": datetime.now().strftime("%H:%M:%S.%f"),
+                "frame_number": self._last_frame_number,
+            }
+            self._redis_client.publish(self._redis_channel, json.dumps(frame_dict))
+        
+        time.sleep(self._sleep_time)
+
+    def _set_video_dimensions(self):
+        if not self._video_capture.isOpened():
+            print("Video capture is not opened.")
+            return
+        self._width = int(self._video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+        self._height = int(self._video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
