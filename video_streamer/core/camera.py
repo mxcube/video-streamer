@@ -269,7 +269,7 @@ class VideoTestCamera(Camera):
         size = frame_pil.size        
         frame_bytes = frame_pil.tobytes()
         self._write_data(bytearray(frame_bytes))
-
+        self._last_frame_number += 1
         if self._redis:
             frame_dict = {
                 "data": base64.b64encode(frame_bytes).decode('utf-8'),
