@@ -116,6 +116,14 @@ def parse_args() -> None:
         default="video-streamer",
     )
 
+    opt_parser.add_argument(
+        "-irc",
+        "--in_redis_channel",
+        dest="in_redis_channel",
+        help="Channel for RedisCamera to listen to",
+        default="CameraStream",
+    )
+
     return opt_parser.parse_args()
 
 
@@ -142,6 +150,7 @@ def run() -> None:
                     "format": args.output_format,
                     "hash": args.hash,
                     "size": _size,
+                    "in_redis_channel": args.in_redis_channel,
                 }
             }
         }
