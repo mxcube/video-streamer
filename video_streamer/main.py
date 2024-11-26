@@ -62,7 +62,7 @@ def parse_args() -> None:
         "-of",
         "--output-format",
         dest="output_format",
-        help="output format, MPEG1 or MJPEG1",
+        help="output format, MPEG1 or MJPEG",
         default="MPEG1",
     )
 
