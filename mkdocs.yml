@@ -1,0 +1,22 @@
+site_name: MXCuBE Video-Streamer
+site_url: "https://github.com/mxcube/video-streamer"
+
+nav:
+  - Home: index.md
+  - About: about.md
+  - Developers Guidelines:
+      - Contributing: devs/contributing.md
+      - Documentation: devs/documentation.md
+  - Installation: installation.md
+  - Usage:
+      - Cameras: usage/cameras.md
+      - Setup: usage/setup.md
+  - FAQ: faq.md
+  - License: license.md
+
+plugins:
+  -  macros:
+      module_name: docs_config/main
+
+extra:
+    license_path: ./License
