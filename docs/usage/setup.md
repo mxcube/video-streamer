@@ -63,7 +63,7 @@ There is a default test/demo UI to see the video stream on `http://localhost:[po
 
 There is the possibility to use a configuration file instead of command line arguments. All  command line arguments except debug are ignored if a config file is used. The configuration file also makes it possible to configure several sources while the command line only allows  configuration of a single source.
 
-The configuration file format is *JSON*. A test image is used when the input_uri is set to "test" (Same as `-uri` flag). The example below creates one *MPEG1* stream (on port 8000) and one *MJPEG* stream (on port 8001) from the test image.
+The configuration file format is *JSON*. A test image is used when the input_uri is set to `test` (Same as `-uri` flag). The example below creates one *MPEG1* stream (on port 8000) and one *MJPEG* stream (on port 8001) from the test image.
 
 Run: 
 
