@@ -1,29 +1,25 @@
 # Installation
 
-Start by cloning the repository to your local machine:
+1. Start by cloning the repository to your local machine:
 
-```bash
-git clone https://github.com/mxcube/video-streamer.git
-cd video-streamer
-```
+        git clone https://github.com/mxcube/video-streamer.git
+        cd video-streamer
 
-Optionally you can create a [conda](https://docs.conda.io/projects/conda/en/latest/index.html) environment like this:
+1. Optionally, you can create and activate a [conda](https://docs.conda.io/projects/conda/en/latest/index.html) environment like this:
 
-```bash
-conda env create -f conda-environment.yml
-```
+        conda env create -f conda-environment.yml
+        conda activate video-streamer
+    
+    If you skip this part, please make sure to have all necessary packages from `conda-environment.yml` installed.
 
-Install all dependencies necessary for the code to run either with pip:
+1. Install all dependencies necessary for the code to run; either with pip:
 
-```bash
-# for development
-pip install -e .
+        # for development
+        pip install -e .
 
-#for usage
-pip install .
-```
+        #for usage
+        pip install .
 
-or poetry:
-```bash
-poetry install
-```
+    or poetry:
+
+        poetry install

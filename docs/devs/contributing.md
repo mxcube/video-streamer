@@ -29,16 +29,12 @@ PRs should be made against the [main](https://github.com/mxcube/video-streamer/t
 ### Preparing a new commit
 1. Make sure that you are working with the latest changes from the main branch. From the root of the repository do:
 
-        ```bash
         git checkout main
         git pull --rebase main
-        ```
 
 1. Create a new branch. It is recommended to use a meaningful name, for instance: 
 
-        ```bash
         git checkout -b [initials]-[fix/feature]-[some name]
-        ```
     
     For the remainder of this page, we assume that your branch is called `mx-fix-documentation`.
 
@@ -46,11 +42,9 @@ PRs should be made against the [main](https://github.com/mxcube/video-streamer/t
 1. Test your changes and make sure, the code behaves as expected.
 1. Commit your changes and push the branch
 
-        ```bash
         git add .
         git commit -m "Add feature X"
         git push origin mx-fix-doumentation
-        ```
 
 ### Create a new PR on the Github webpage
 After committing and pushing your changes to the remote repository, the final step is to create a pull request (PR) for review and merging into the `main` branch. To do so, you can navigate to your branch on the github webpage and create a new pull request. Below you can find some general guidelines for your PR:
