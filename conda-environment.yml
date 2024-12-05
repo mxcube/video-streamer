@@ -2,6 +2,7 @@ name: video-streamer
 channels:
   - conda-forge
 dependencies:
-  - python >=3.8,<3.12
-  - poetry
+  - ffmpeg
   - pip
+  - poetry
+  - python >=3.8,<3.12
