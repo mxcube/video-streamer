@@ -1,7 +1,18 @@
 # video-streamer
-Video streamer to be used with MXCuBE. The streamer currently suports streaming from Tango (Lima) devices but can be extened to used with other camera solutons aswell. The output streams are either MJPEG or MPEG1.
+Video streamer to be used with MXCuBE. The streamer currently supports streaming from Tango (Lima) devices, as well as Redis and MJPEG streams and can be extened to be used with other camera solutions as well. The output streams are either MJPEG or MPEG1 with an option to use a secondary output stream to a Redis Pub/Sub channel.
 
 ![Screenshot from 2023-03-03 14-36-02](https://user-images.githubusercontent.com/4331447/222733892-c7d3af26-26ca-4a3c-b9f4-ab56fc91e390.png)
+
+### Documentation 📚
+
+Check out the full [documentation](https://mxcube.github.io/video-streamer/) to explore everything this project has to offer!
+Including:
+
+- Information about all supported input camera types
+- A detailed guide on how to start and run the project
+- A developers guide
+- An FAQ
+- and more!
 
 ### Installation
 
@@ -58,7 +69,7 @@ options:
 
 There is the possibility to use a configuration file instead of command line arguments. All  command line arguments except debug are ignored if a config file is used. The configuration  file also makes it possible to configure several sources while the command line only allows  configuration of a single source.
 
-### Example command line (for testing):
+#### Example command line (for testing):
 ```
 video-streamer -d -of MPEG1 -uri test
 ```
@@ -91,84 +102,7 @@ config.json:
 }
 ```
 
-### Redis
-
-[Redis](https://redis.io/) Pub/Sub (Publish/Subscribe) is a messaging paradigm where publishers send messages to specific channels, and subscribers receive messages from the channels they are subscribed to. It is commonly used for real-time communication between applications or components.
-
-Instead of using a real camera, the `video-streamer` allows to use said `Redis` Pub/Sub channel to create a stream in MPEG1 or MJPEG format.
-
-#### Command Line Example
-To use the `RedisCamera`, one can use the following command:
-
-```
-video-streamer -d -of MJPEG1 -uri redis://[host]:[port] -irc ExampleStream
-```
-
-where `host` and `port` are the respective host and port of the `Redis` server and `ExampleStream` would be the Pub/Sub channel to use for generating the stream. 
-
-#### Correct Format for Redis Camera
-
-For the Camera to pick up your images and correctly format them into a stream in MJPEG or MPEG1 format. You should publish each image as a dictionary containing the `base64` encoded image data and the image size.
-
-```
-    image_dict = {
-        "data": [base64 encoded image],
-        "size": [image size],
-    }
-```
-
-#### Example Redis Pub/Sub communication
-
-The following script is an example on how to send a stream via `Redis` Pub/Sub channel, so that the `video-streamer` can pick it up. 
-
-```
-import redis
-import time
-from PIL import Image
-import io
-import base64
-import json
-
-# Configuration
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
-CHANNEL_NAME = 'ExampleStream'
-IMAGE_PATH = './fakeimg.jpg'
-PUBLISH_INTERVAL = 0.1  # Simulate a 10 frames/second stream
-
-def load_image_as_bytes(image_path):
-    """Load an image and convert it to bytes."""
-    with Image.open(image_path) as img:
-        size = (img.height, img.width)
-        byte_stream = io.BytesIO()
-        img.save(byte_stream, format=img.format)
-        return byte_stream.getvalue(), size
-
-def main():
-    # Connect to Redis
-    redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
-    
-    # Load image as bytes and use correct format for the video-streamer
-    image_data, image_size = load_image_as_bytes(IMAGE_PATH)
-    image_dict = {
-        "data": base64.b64encode(image_data).decode("utf-8"),
-        "size": image_size,
-    }
-    try:
-        while True:
-            redis_client.publish(CHANNEL_NAME, json.dumps(image_dict))
-            time.sleep(PUBLISH_INTERVAL)
-    except KeyboardInterrupt:
-        print("Stopped publishing.")
-
-if __name__ == '__main__':
-    main()
-
-```
-
-This script sends a jpeg image with a frame rate of 10 frames per second to the `ExampleStream` channel. With a `Redis` server running on `localhost:6379`
-
-#### Dual Streaming: Seamlessly Serve MJPEG and Redis Pub/Sub Video Feeds
+### Dual Streaming: Seamlessly Serve MJPEG and Redis Pub/Sub Video Feeds
 
 When generating an MJPEG stream using any of the cameras (except for `MJPEGCamera`) implemented in `video-streamer`, it is possible to use a `Redis` Pub/Sub channel as additional Video feed.
 Below you can see an example on how to do that from the command line:
