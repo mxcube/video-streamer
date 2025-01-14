@@ -28,7 +28,7 @@ class Streamer:
         elif self._config.input_uri == "videotest":
             return VideoTestCamera("TANGO_URI", self._expt, False, self._config.redis, self._config.redis_channel)
         elif self._config.input_uri.startswith("http"):
-            return MJPEGCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
+            return MJPEGCamera(self._config.input_uri, self._expt, self._config.auth_config, False, self._config.redis, self._config.redis_channel)
         elif self._config.input_uri.startswith("redis"):
             return RedisCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel, self._config.in_redis_channel)
         
@@ -100,8 +100,8 @@ class FFMPGStreamer(Streamer):
         :returns: Processes performing encoding
         :rtype: tuple
         """
-        source_size = "%s:%s" % source_size
-        out_size = "%s:%s" % out_size
+        source_size_str = "%s:%s" % source_size
+        out_size_str = "%s:%s" % out_size
 
         ffmpeg_args = [
             "ffmpeg",
@@ -110,7 +110,7 @@ class FFMPGStreamer(Streamer):
             "-pixel_format",
             "rgb24",
             "-s",
-            source_size,
+            source_size_str,
             "-i",
             "-",
             "-f",
@@ -118,7 +118,7 @@ class FFMPGStreamer(Streamer):
             "-q:v",
             "%s" % quality,
             "-vf",
-            "scale=%s" % out_size,
+            "scale=%s" % out_size_str,
             "-vcodec",
             "mpeg1video",
             "http://127.0.0.1:%s/video_input/" % port,

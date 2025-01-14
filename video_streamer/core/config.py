@@ -17,12 +17,32 @@ else:
     from typing_extensions import Self
 
 __all__ = (
+    "AuthenticationConfiguration",
     "SourceConfiguration",
     "ServerConfiguration",
     "get_config_from_file",
     "get_config_from_dict",
+    "get_auth_config_from_dict",
 )
 
+class AuthenticationConfiguration(BaseModel):
+    """Authentication Configuration"""
+
+    type: Union[str, None] = Field(
+        title="Authentication Type",
+        description="Type of authentication, supported types are 'Basic', 'Digest', None",
+        default= None,
+    )
+
+    username: Union[bytes, str] = Field(
+        title="Username",
+        default="",
+    )
+
+    password: Union[bytes, str] = Field(
+        title="Password",
+        default="",
+    )
 
 class SourceConfiguration(BaseModel):
     """Source Configuration"""
@@ -65,7 +85,10 @@ class SourceConfiguration(BaseModel):
         description= "Channel for RedisCamera to listen to",
         default="CameraStream",
     )
-
+    auth_config: AuthenticationConfiguration = Field(
+        title="Authentication Configurations",
+        default=AuthenticationConfiguration(type=None),
+    )
 
 class ServerConfiguration(BaseModel):
     """Server Configuration"""
@@ -130,7 +153,7 @@ def get_config_from_file(fpath: Union[str, Path]) -> Union[ServerConfiguration, 
 
 
 def get_config_from_dict(
-    config_data: dict[str, Any],
+    config_data: Dict[str, Any],
 ) -> Union[ServerConfiguration, None]:
     """Get server configuration from dictionary.
 
@@ -142,5 +165,21 @@ def get_config_from_dict(
     """
     try:
         return ServerConfiguration.model_validate(config_data)
+    except ValidationError:
+        return None
+
+def get_auth_config_from_dict(
+    config_data: Dict[str, Any],
+) -> Union[AuthenticationConfiguration, None]:
+    """Get authentication configuration from dictionary.
+    
+    Args:
+        config_data (dict[str, Any]): Authentication Data.
+
+    Returns:
+        Union[AuthenticationConfiguration, None]: Authentication Configuration or None.
+    """
+    try:
+        return AuthenticationConfiguration.model_validate(config_data)
     except ValidationError:
         return None
