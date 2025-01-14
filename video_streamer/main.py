@@ -2,7 +2,7 @@ import uvicorn
 import argparse
 
 from video_streamer.server import create_app
-from video_streamer.core.config import get_config_from_dict, get_config_from_file
+from video_streamer.core.config import get_config_from_dict, get_config_from_file, get_auth_config_from_dict
 
 
 def parse_args() -> argparse.Namespace:
@@ -124,6 +124,30 @@ def parse_args() -> argparse.Namespace:
         default="CameraStream",
     )
 
+    opt_parser.add_argument(
+        "-auth",
+        "--auth_type",
+        dest="auth_type",
+        help="Type of authentication request",
+        default="Digest",
+    )
+
+    opt_parser.add_argument(
+        "-user",
+        "--username",
+        dest="username",
+        help="Username for authentication request",
+        default="",
+    )
+
+    opt_parser.add_argument(
+        "-pass",
+        "--password",
+        dest="password",
+        help="Password for authentication request",
+        default="",
+    )
+
     return opt_parser.parse_args()
 
 
@@ -151,6 +175,11 @@ def run() -> None:
                     "hash": args.hash,
                     "size": _size,
                     "in_redis_channel": args.in_redis_channel,
+                    "auth_config": get_auth_config_from_dict({
+                        "type": args.auth_type,
+                        "username": args.username,
+                        "password": args.password
+                    })
                 }
             }
         }

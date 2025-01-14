@@ -36,6 +36,25 @@ The `MJPEGCamera` provides specialized support for *MJPEG* video streams. It is 
 
 > **Note**: Currently the `MJPEGCamera` is the only camera that does not support conversion to a `Redis` Pub/Sub channel (more about streaming on a [redis channel](setup.md#dual-streaming-seamlessly-serve-mjpeg-and-redis-pubsub-video-feeds))
 
+#### Authentication for MJPEG Streams
+
+Some MJPEG streams may require authentication to access. To support such scenarios, the `MJPEGCamera` class includes built-in authentication support. Currently, both `Basic` and `Digest` authentication methods are supported.
+
+Below is an example of how to use the video-streamer to access a stream requiring `Basic` authentication:
+
+```bash
+video-streamer -of MPEG1 -uri <stream_url> -auth Basic -user <username> -pass <password>
+```
+
+##### Explanation of the Parameters:
+- `-of`: Specifies the ouput format, here `MPEG1` is used.
+- `-uri`: The URL of the MJPEG stream.
+- `-auth`: Specifies the authentication method (`Basic` or `Digest`)
+- `-user`: The username for authentication
+- `-pass`: The password required for authentication
+
+Replace `<stream_url>`, `<username>` and `<password>` with the appropriate values for your stream. Ensure you handle credentials securely and avoid exposing them in public or shared scripts!
+
 ---
 
 ## RedisCamera
@@ -48,7 +67,7 @@ Instead of using a real camera, the `video-streamer` allows to use said `Redis` 
 To use the `RedisCamera`, one can use the following command:
 
 ```bash
-video-streamer -d -of MJPEG1 -uri redis://[host]:[port] -irc ExampleStream
+video-streamer -d -of MPEG1 -uri redis://[host]:[port] -irc ExampleStream
 ```
 
 where `host` and `port` are the respective host and port of the `Redis` server and `ExampleStream` would be the Pub/Sub channel to use for generating the stream. 
