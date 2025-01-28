@@ -87,6 +87,7 @@ class FFMPGStreamer(Streamer):
         source_size: Tuple[int, int],
         out_size: Tuple[int, int],
         quality: int = 4,
+        vertical_flip: bool = False,
         port: int = 8000,
     ) -> None:
         """
@@ -118,7 +119,7 @@ class FFMPGStreamer(Streamer):
             "-q:v",
             "%s" % quality,
             "-vf",
-            "scale=%s" % out_size_str,
+            "scale=%s%s" % (out_size_str, (",vflip" if vertical_flip else "")),
             "-vcodec",
             "mpeg1video",
             "http://127.0.0.1:%s/video_input/" % port,
@@ -142,7 +143,7 @@ class FFMPGStreamer(Streamer):
         out_size = self._config.size if self._config.size[0] else camera.size
 
         ffmpeg_p = self._start_ffmpeg(
-            camera.size, out_size, self._config.quality, self._port
+            camera.size, out_size, self._config.quality, self._config.v_flip, self._port
         )
 
         self._poll_image_p = multiprocessing.Process(

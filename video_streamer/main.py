@@ -59,6 +59,15 @@ def parse_args() -> argparse.Namespace:
     )
 
     opt_parser.add_argument(
+        "-vf",
+        "--vflip",
+        action="store_true",
+        dest="vertical_flip",
+        help="Flip video vertically, default false",
+        default=False,
+    )
+
+    opt_parser.add_argument(
         "-of",
         "--output-format",
         dest="output_format",
@@ -174,6 +183,7 @@ def run() -> None:
                     "format": args.output_format,
                     "hash": args.hash,
                     "size": _size,
+                    "v_flip": args.vertical_flip,
                     "in_redis_channel": args.in_redis_channel,
                     "auth_config": get_auth_config_from_dict({
                         "type": args.auth_type,
