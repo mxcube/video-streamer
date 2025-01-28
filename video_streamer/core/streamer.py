@@ -64,7 +64,7 @@ class MJPEGStreamer(Streamer):
 
             yield (
                 b"--frame\r\n--!>\nContent-type: image/jpeg\n\n"
-                + self._camera.get_jpeg(last_frame, out_size)
+                + self._camera.get_jpeg(last_frame, out_size, self._config.v_flip)
                 + b"\r\n"
             )
 
