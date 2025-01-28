@@ -70,6 +70,11 @@ class SourceConfiguration(BaseModel):
         title="Image Size",
         default=(0, 0),
     )
+    v_flip: bool = Field(
+        title='Vertical flip',
+        description="Flip streamed video vertically",
+        default=False
+    )
     redis: Optional[str] = Field(
         title="Redis URI",
         description="Redis host and port (format host:port).",
