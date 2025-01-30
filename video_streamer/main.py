@@ -138,7 +138,7 @@ def parse_args() -> argparse.Namespace:
         "--auth_type",
         dest="auth_type",
         help="Type of authentication request",
-        default="Digest",
+        default=None,
     )
 
     opt_parser.add_argument(
