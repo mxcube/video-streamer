@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mxcube_video_streamer"
-version = "v1.6.0"
+version = "1.7.0"
 packages = [{include = "video_streamer"}]
 license = "MIT"
 description = "FastAPI Based video streamer"
