@@ -23,8 +23,9 @@ options:
                                             connections default (0.0.0.0)
   -p PORT, --port PORT                      Port
   -q QUALITY, --quality                     QUALITY
-                                            Compresion rate/quality
+                                            Compression rate/quality
   -s SIZE, --size SIZE                      size
+  -vf, --vflip                              Flip video vertically, default False
   -of OUTPUT_FORMAT, --output-format        OUTPUT_FORMAT
                                             output format, MPEG1 or MJPEG
   -id HASH, --id HASH                       Stream id
