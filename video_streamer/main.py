@@ -46,7 +46,7 @@ def parse_args() -> argparse.Namespace:
         "-q",
         "--quality",
         dest="quality",
-        help="Compresion rate/quality",
+        help="Compression rate/quality",
         default=4,
     )
 
