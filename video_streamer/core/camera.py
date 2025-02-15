@@ -205,6 +205,11 @@ class MJPEGCamera(Camera):
 
 
 class LimaCamera(Camera):
+
+    # Image modes in LImA. Supporting only Y8 and RGB24 for now.
+    IMAGE_MODE_Y8 = 0
+    IMAGE_MODE_RGB24 = 6
+
     def __init__(self, device_uri: str, sleep_time: float, debug: bool = False, redis: str = None, redis_channel: str = None):
         super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
 
@@ -224,18 +229,68 @@ class LimaCamera(Camera):
             sys.exit(-1)
         else:
             return lima_tango_device
+        
+    def _convert_to_rgb24(self, raw_image: bytearray, image_mode: int, width: int, height: int) -> bytearray:
+        """Converts image's byte representation to RGB24 format, which is used by ffmpeg streaming process.
 
-    def _get_image(self) -> Tuple[bytearray, float, float, int]:
+        Args:
+            raw_image: image as bytes
+            image_mode: LImA image mode
+            width: width of image
+            height: height of image
+        Raises:
+            NotImplementedError: unsupported image mode
+        Returns:
+            image as bytes in RGB24 format
+        """
+        if image_mode == self.IMAGE_MODE_Y8:
+            raw_image = raw_image[:width * height]
+            gray_img = Image.frombytes("L", (width, height), raw_image)
+            rgb_img = gray_img.convert("RGB")
+            return rgb_img.tobytes()
+        elif image_mode == self.IMAGE_MODE_RGB24:
+            # In RGB24 mode, we expect width*height*3 bytes.
+            expected_bytes = width * height * 3
+            return raw_image[:expected_bytes]
+        else:
+            logging.error(f"Unsupported image mode: {image_mode}")
+            raise NotImplementedError(f"Conversion for image mode {image_mode} not implemented.")
+
+    def _get_image(self) -> Tuple[bytearray, int, int, int]:
+        """Gets a single image from the Tango device.
+        
+        Returns:
+            raw_data: image as bytes
+            width: width of image
+            height: height of image
+            frame_number: frame number of the image
+        """
         img_data = self._lima_tango_device.video_last_image
 
+        # Header format for `video_last_image` attribute in LImA.
         hfmt = ">IHHqiiHHHH"
         hsize = struct.calcsize(hfmt)
-        _, _, _, frame_number, width, height, _, _, _, _ = struct.unpack(
-            hfmt, img_data[1][:hsize]
-        )
+        header_fields = struct.unpack(hfmt, img_data[1][:hsize])
+        (
+            _magic_number,
+            _version, 
+            image_mode, 
+            frame_number, 
+            width, 
+            height, 
+            _endianness, 
+            _header_size, 
+            _padding, 
+            _padding2
+        ) = header_fields
 
-        raw_data = img_data[1][hsize:]
-
+        raw_data = self._convert_to_rgb24(
+            raw_image=img_data[1][hsize:],
+            image_mode=image_mode,
+            width=width,
+            height=height
+            )
+        
         return raw_data, width, height, frame_number
 
     def _poll_once(self) -> None:
