@@ -8,6 +8,7 @@ from video_streamer.core.websockethandler import WebsocketHandler
 from video_streamer.core.streamer import FFMPGStreamer, MJPEGStreamer
 from fastapi.templating import Jinja2Templates
 
+from contextlib import asynccontextmanager
 
 def create_app(config, host, port, debug):
     app = None
@@ -20,8 +21,16 @@ def create_app(config, host, port, debug):
 
 
 def create_mjpeg_app(config, host, port, debug):
-    app = FastAPI()
     streamer = MJPEGStreamer(config, host, port, debug)
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        try:
+            yield
+        finally:
+            streamer.stop()
+
+    app = FastAPI(lifespan=lifespan)
     ui_template_root = os.path.join(os.path.dirname(__file__), "ui/template")
     templates = Jinja2Templates(directory=ui_template_root)
 
@@ -41,21 +50,22 @@ def create_mjpeg_app(config, host, port, debug):
             streamer.start(), media_type='multipart/x-mixed-replace;boundary="!>"'
         )
 
-    @app.on_event("startup")
-    async def startup():
-        pass
-
-    @app.on_event("shutdown")
-    async def shutdown():
-        streamer.stop()
-
     return app
 
 
 def create_mpeg1_app(config, host, port, debug):
-    app = FastAPI()
-    manager = WebsocketHandler()
     streamer = FFMPGStreamer(config, host, port, debug)
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        streamer.start()
+        try:
+            yield
+        finally:
+            streamer.stop()
+
+    app = FastAPI(lifespan=lifespan)
+    manager = WebsocketHandler()
     ui_static_root = os.path.join(os.path.dirname(__file__), "ui/static")
     ui_template_root = os.path.join(os.path.dirname(__file__), "ui/template")
     templates = Jinja2Templates(directory=ui_template_root)
@@ -86,14 +96,6 @@ def create_mpeg1_app(config, host, port, debug):
     async def video_in(request: Request):
         async for chunk in request.stream():
             await manager.broadcast(chunk)
-
-    @app.on_event("startup")
-    async def startup():
-        streamer.start()
-
-    @app.on_event("shutdown")
-    async def shutdown():
-        streamer.stop()
 
     return app
 
