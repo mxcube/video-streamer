@@ -2,7 +2,7 @@ import subprocess
 import multiprocessing
 import queue
 import time
-from typing import Tuple
+from typing import Tuple, Generator, Any, Union
 
 from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, VideoTestCamera, Camera, RedisCamera
 from video_streamer.core.config import SourceConfiguration
@@ -16,7 +16,7 @@ class Streamer:
         self._debug = debug
         self._expt = 0.05
 
-    def start(self) -> None:
+    def start(self) -> Union[Generator, None, subprocess.Popen]:
         pass
 
     def stop(self) -> None:
@@ -42,7 +42,7 @@ class MJPEGStreamer(Streamer):
         self._expt = 0.05
         self._camera = self.get_camera()
 
-    def start(self) -> None:
+    def start(self) -> Generator[bytes, Any, Any]:
         _q = multiprocessing.Queue(1)
 
         self._poll_image_p = multiprocessing.Process(
@@ -71,8 +71,21 @@ class MJPEGStreamer(Streamer):
             time.sleep(self._expt)
 
     def stop(self) -> None:
+        print("Stopping Streamer...")
         if self._poll_image_p:
-            self._poll_image_p.kill()
+            self._poll_image_p.terminate()
+
+        time.sleep(1)
+        try:
+            if self._poll_image_p and self._poll_image_p.is_alive():
+                raise Exception("Image poll process did not stop properly")
+        except Exception as e:
+            print(f"Streamer did not stop properly: {e}")
+            print("Killing streamer forcefully...")
+            if self._poll_image_p:
+                self._poll_image_p.kill()
+        else:
+            print("Streamer stopped properly")
 
 
 class FFMPGStreamer(Streamer):
@@ -89,7 +102,7 @@ class FFMPGStreamer(Streamer):
         quality: int = 4,
         vertical_flip: bool = False,
         port: int = 8000,
-    ) -> None:
+    ) -> subprocess.Popen[bytes]:
         """
         Start encoding with ffmpeg and stream the video with the node
         websocket relay.
@@ -137,7 +150,7 @@ class FFMPGStreamer(Streamer):
 
         return ffmpeg
 
-    def start(self) -> None:
+    def start(self) -> subprocess.Popen[bytes]:
         camera = self.get_camera()
 
         out_size = self._config.size if self._config.size[0] else camera.size
@@ -155,8 +168,26 @@ class FFMPGStreamer(Streamer):
         return ffmpeg_p
 
     def stop(self) -> None:
+        print("Stopping Streamer...")
         if self._ffmpeg_process:
-            self._ffmpeg_process.kill()
+            self._ffmpeg_process.terminate()
 
         if self._poll_image_p:
-            self._poll_image_p.kill()
+            self._poll_image_p.terminate()
+
+        time.sleep(2)
+        try:
+            if self._ffmpeg_process and self._ffmpeg_process.poll() is None:
+                raise Exception("FFMPEG process did not stop properly")
+
+            if self._poll_image_p and self._poll_image_p.is_alive():
+                raise Exception("Image poll process did not stop properly")
+        except Exception as e:
+            print(f"Streamer did not stop properly: {e}")
+            print("Killing streamer forcefully...")
+            if self._ffmpeg_process:
+                self._ffmpeg_process.kill()
+            if self._poll_image_p:
+                self._poll_image_p.kill()
+        else:
+            print("Streamer stopped properly")
