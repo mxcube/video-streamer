@@ -9,6 +9,16 @@ from video_streamer.core.streamer import FFMPGStreamer, MJPEGStreamer
 from fastapi.templating import Jinja2Templates
 
 from contextlib import asynccontextmanager
+import signal
+import sys
+
+from typing import Optional
+from types import FrameType
+
+# This function makes sure that the server is correctly shutted down
+def handle_shutdown(signum: int, frame: Optional[FrameType]) -> None:
+    print(f"Received signal {signum}, shutting down streamer...")
+    sys.exit(0)
 
 def create_app(config, host, port, debug):
     app = None
@@ -19,12 +29,15 @@ def create_app(config, host, port, debug):
 
     return app
 
-
 def create_mjpeg_app(config, host, port, debug):
     streamer = MJPEGStreamer(config, host, port, debug)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
+        # Some signals are catched from uvicorn/fastapi, this makes sure that the server is correctly 
+        # shutting down and the second part of the lifespan is called
+        signal.signal(signal.SIGTERM, handle_shutdown)
+        signal.signal(signal.SIGINT, handle_shutdown)
         try:
             yield
         finally:
@@ -59,6 +72,10 @@ def create_mpeg1_app(config, host, port, debug):
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         streamer.start()
+        # Some signals are catched from uvicorn/fastapi, this makes sure that the server is correctly 
+        # shutting down and the second part of the lifespan is called
+        signal.signal(signal.SIGTERM, handle_shutdown)
+        signal.signal(signal.SIGINT, handle_shutdown)
         try:
             yield
         finally:

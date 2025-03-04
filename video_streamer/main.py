@@ -1,15 +1,9 @@
 import uvicorn
 import argparse
-import sys
-import signal
 
 from video_streamer.server import create_app
 from video_streamer.core.config import get_config_from_dict, get_config_from_file, get_auth_config_from_dict
 
-
-def handle_sigterm(signal, frame):
-    print("Received SIGTERM, shutting down gracefully...")
-    sys.exit(0)  # Exit the program with a clean status
 
 def parse_args() -> argparse.Namespace:
     opt_parser = argparse.ArgumentParser(description="mxcube video streamer")
@@ -219,10 +213,9 @@ def run() -> None:
                 reload=False,
                 workers=1,
                 log_level=loglevel,
+                lifespan="on",
             )
 
-            signal.signal(signal.SIGTERM, handle_sigterm)
-            signal.signal(signal.SIGINT, handle_sigterm)
             server = uvicorn.Server(config=config)
             server.run()
 
