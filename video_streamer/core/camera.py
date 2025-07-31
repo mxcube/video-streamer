@@ -18,11 +18,6 @@ from typing import Union, IO, Tuple
 
 from PIL import Image
 
-try:
-    from PyTango import DeviceProxy
-except ImportError:
-    logging.warning("PyTango not available.")
-
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 from video_streamer.core.config import AuthenticationConfiguration
 
@@ -218,7 +213,13 @@ class LimaCamera(Camera):
         self._sleep_time = sleep_time
         self._last_frame_number = -1
 
-    def _connect(self, device_uri: str) -> DeviceProxy:
+    def _connect(self, device_uri: str) -> "DeviceProxy":
+        try: 
+            from PyTango import DeviceProxy
+        except ImportError:
+            logging.error("PyTango is not installed. Please install it to use LImA cameras.")
+            raise ImportError("PyTango is not installed. Please install it to use LImA cameras.")
+
         try:
             logging.info("Connecting to %s", device_uri)
             lima_tango_device = DeviceProxy(device_uri)
