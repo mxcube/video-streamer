@@ -147,7 +147,8 @@ class MJPEGCamera(Camera):
         Extract a single JPEG frame from the buffer if a complete frame exists.
         Returns a tuple of (frame_data, remaining_buffer).
         """
-        boundary_bytes = f"--{boundary}".encode()
+        boundary_body_prefix = "--" if not boundary.startswith("--") else ""
+        boundary_bytes = f"{boundary_body_prefix}{boundary}".encode()
         start_index = buffer.find(boundary_bytes)
         if start_index == -1:
             return None, buffer  # Boundary not found
