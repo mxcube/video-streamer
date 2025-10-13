@@ -3,6 +3,13 @@ import multiprocessing
 import queue
 import time
 from typing import Tuple, Generator, Any, Union
+from av import VideoFrame
+from aiortc import MediaStreamTrack
+import asyncio
+
+from fractions import Fraction
+
+import numpy as np
 
 from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, VideoTestCamera, Camera, RedisCamera
 from video_streamer.core.config import SourceConfiguration
@@ -16,7 +23,7 @@ class Streamer:
         self._debug = debug
         self._expt = 0.05
 
-    def start(self) -> Union[Generator, None, subprocess.Popen]:
+    def start(self) -> Union[Generator, None, subprocess.Popen, MediaStreamTrack]:
         pass
 
     def stop(self) -> None:
@@ -191,3 +198,72 @@ class FFMPGStreamer(Streamer):
                 self._poll_image_p.kill()
         else:
             print("Streamer stopped properly")
+
+
+class VideoMediaStreamer(Streamer):
+    """
+    A video track that returns frames from a multiprocessing queue.
+    """
+
+    kind = "video"
+
+    def __init__(self, config, host, port, debug):
+        super().__init__(config, host, port, debug)
+        
+        self._poll_image_p = None
+
+    def start(self) -> MediaStreamTrack:
+        camera = self.get_camera()
+
+        _q = multiprocessing.Queue(1)
+        self._poll_image_p = multiprocessing.Process(
+            target=camera.poll_image, args=(_q,)
+        )
+        self._poll_image_p.start()
+
+        return QueueVideoTrack(_q, camera.size)
+
+    def stop(self) -> None:
+        print("Stopping Streamer...")
+        if self._poll_image_p:
+            self._poll_image_p.terminate()
+
+        time.sleep(1)
+        try:
+            if self._poll_image_p and self._poll_image_p.is_alive():
+                raise Exception("Image poll process did not stop properly")
+        except Exception:
+            if self._poll_image_p:
+                self._poll_image_p.kill()
+        else:
+            print("Streamer stopped properly")
+
+class QueueVideoTrack(MediaStreamTrack):
+    kind = "video"
+
+    def __init__(self, q: multiprocessing.Queue, image_size:Tuple , fps: int = 15, format_hint: str = "rgb24"):
+        super().__init__()
+        self.q = q
+        self.image_size = image_size
+        self.fps = fps
+        self.time_base = 1 / fps
+        self.format_hint = format_hint
+        self._ts = 0
+
+    async def recv(self) -> VideoFrame:
+        frame_bytes = bytearray()
+        try:
+            while True:
+                frame_bytes = self.q.get_nowait()
+        except Exception:
+            if len(frame_bytes) == 0:
+                frame_bytes = await asyncio.get_event_loop().run_in_executor(None, self.q.get)
+        
+        width, height = self.image_size
+        arr = np.frombuffer(frame_bytes, dtype=np.uint8).reshape((height, width, 3))
+
+        vf = VideoFrame.from_ndarray(arr, format=self.format_hint)
+        self._ts += 1
+        vf.pts = self._ts
+        vf.time_base = Fraction(1, self.fps)
+        return vf

@@ -71,7 +71,7 @@ def parse_args() -> argparse.Namespace:
         "-of",
         "--output-format",
         dest="output_format",
-        help="output format, MPEG1 or MJPEG",
+        help="output format, MPEG1, MJPEG or H264",
         default="MPEG1",
     )
 
@@ -202,7 +202,6 @@ def run() -> None:
 
     for uri, source_config in config.sources.items():
         host, port = uri.split(":")
-
         app = create_app(source_config, host, int(port), debug=args.debug)
 
         if app:
