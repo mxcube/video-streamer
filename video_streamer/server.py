@@ -5,7 +5,7 @@ from fastapi.responses import StreamingResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from video_streamer.core.websockethandler import WebsocketHandler
-from video_streamer.core.streamer import FFMPGStreamer, MJPEGStreamer
+from video_streamer.core.streamer import FFMPGStreamer, MJPEGStreamer, VideoMediaStreamer
 from fastapi.templating import Jinja2Templates
 
 from contextlib import asynccontextmanager
@@ -14,6 +14,10 @@ import sys
 
 from typing import Optional
 from types import FrameType
+
+from aiortc import RTCPeerConnection, RTCRtpSender, RTCSessionDescription
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 # This function makes sure that the server is correctly shutted down
 def handle_shutdown(signum: int, frame: Optional[FrameType]) -> None:
@@ -116,5 +120,69 @@ def create_mpeg1_app(config, host, port, debug):
 
     return app
 
+def create_vp8_app(config, host, port, debug):
 
-available_applications = {"MPEG1": create_mpeg1_app, "MJPEG": create_mjpeg_app}
+    video_capabilities = RTCRtpSender.getCapabilities("video")
+
+    vp8_codecs = [
+        codec for codec in video_capabilities.codecs
+        if codec.mimeType == "video/VP8"
+    ]
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        app.state.streamer = VideoMediaStreamer(config, host, port, debug)
+        app.state.video_track = app.state.streamer.start()
+
+        app.state.pcs = set()
+
+        # Some signals are catched from uvicorn/fastapi, this makes sure that the server is correctly 
+        # shutting down and the second part of the lifespan is called
+        signal.signal(signal.SIGTERM, handle_shutdown)
+        signal.signal(signal.SIGINT, handle_shutdown)
+        try:
+            yield
+        finally:
+            for pc in set(app.state.pcs):
+                await pc.close()
+            app.state.pcs.clear()
+            app.state.streamer.stop()
+
+    app = FastAPI(lifespan=lifespan)
+    app.add_middleware(CORSMiddleware, allow_methods=["OPTIONS", "POST"], allow_origins=["http://localhost:5174"])
+
+    @app.post("/offer")
+    async def offer(request: Request):
+        params = await request.json()
+        offer = RTCSessionDescription(sdp=params["sdp"], type=params["type"])
+        pc = RTCPeerConnection()
+        request.app.state.pcs.add(pc)
+
+        track = request.app.state.video_track
+        pc.addTrack(track)
+
+        # set the preferred codec to VP8
+        for transceiver in pc.getTransceivers():
+            if transceiver.kind == "video":
+                transceiver.setCodecPreferences(vp8_codecs)
+
+        @pc.on("connectionstatechange")
+        async def on_state_change():
+            if pc.connectionState in ("failed", "closed", "disconnected"):
+                await pc.close()
+                request.app.state.pcs.discard(pc)
+
+        await pc.setRemoteDescription(offer)
+        answer = await pc.createAnswer()
+        await pc.setLocalDescription(answer)
+        
+        return JSONResponse(
+            content={
+                "sdp": pc.localDescription.sdp,
+                "type": pc.localDescription.type,
+            }
+        )
+
+    return app
+
+available_applications = {"MPEG1": create_mpeg1_app, "MJPEG": create_mjpeg_app, "VP8": create_vp8_app}
