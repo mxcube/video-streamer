@@ -4,7 +4,7 @@ import queue
 import time
 from typing import Tuple, Generator, Any, Union
 
-from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, VideoTestCamera, Camera, RedisCamera
+from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, VideoTestCamera, Camera, RedisCamera, EpicsPVACamera
 from video_streamer.core.config import SourceConfiguration
 
 
@@ -31,7 +31,10 @@ class Streamer:
             return MJPEGCamera(self._config.input_uri, self._expt, self._config.auth_config, False, self._config.redis, self._config.redis_channel)
         elif self._config.input_uri.startswith("redis"):
             return RedisCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel, self._config.in_redis_channel)
-        
+        elif self._config.input_uri.startswith("pva"):
+            return EpicsPVACamera(self._config.input_uri, self._expt, False,
+                                  self._config.redis, self._config.redis_channel)
+
         return LimaCamera(self._config.input_uri, self._expt, False, self._config.redis, self._config.redis_channel)
 
 

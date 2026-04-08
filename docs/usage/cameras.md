@@ -10,6 +10,7 @@ The streamer automatically selects the appropriate mode for the camera based on 
 |MJPEGCamera|Should start with `http://` and include host and port, e.g. `http://localhost:8000`|
 |RedisCamera|Should start with `redis://` and include host and port of redis server, e.g. `redis://localhost:6379`|
 |LimaCamera|URI of the Tango (Lima) device|
+|EpicsPVACamera|Should start with `pva://` and include the image PV name, e.g. `pva://SIM:Pva1:Image`|
 ---
 
 ## TestCamera
@@ -35,6 +36,14 @@ The `LimaCamera` supports streaming from a Tango (Lima) device. by polling the i
 The `MJPEGCamera` provides specialized support for *MJPEG* video streams. It is designed to fetch images from an *MJPEG* stream, such as those from a web camera or a streaming url.
 
 > **Note**: Currently the `MJPEGCamera` is the only camera that does not support conversion to a `Redis` Pub/Sub channel (more about streaming on a [redis channel](setup.md#dual-streaming-seamlessly-serve-mjpeg-and-redis-pubsub-video-feeds))
+
+---
+
+## EpicsPVACamera
+
+The `EpicsPVACamera` supports streaming from Epics areaDetector servers with PVA enabled. It uses the `p4p` library to pool the image from the IOC and parse its content using the `NTNDArray.unwrap` method.
+
+> **Note**: Currently, only 3 dimensional (RGB) uncompressed images are supported. In the future, when `p4p` implements decompression, this can be changed.
 
 #### Authentication for MJPEG Streams
 

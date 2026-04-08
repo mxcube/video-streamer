@@ -32,6 +32,7 @@ pydantic = ">=2.8.2,<2.9.0"
 pydantic-core = "2.20.1"
 pydantic-settings = ">=2.4.0"
 pytango = {version = "^9.3.6", optional = true}
+p4p = {version = "^4.2.2", optional = true}
 redis = ">=4.3.5,<5.0.0"
 requests = "^2.32.4"
 typing-extensions = "^4.14.1"
@@ -47,6 +48,7 @@ pytest-cov = "5.0.0"
 
 [tool.poetry.extras]
 tango = ["pytango"]
+epics = ["p4p"]
 
 [tool.black]
 line-length = 88

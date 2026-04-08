@@ -317,6 +317,87 @@ class LimaCamera(Camera):
         time.sleep(self._sleep_time / 2)
 
 
+class EpicsPVACamera(Camera):
+    def __init__(self, device_uri: str, sleep_time: float, debug: bool = False,
+                 redis: str = None, redis_channel: str = None):
+        super().__init__(device_uri, sleep_time, debug, redis, redis_channel)
+
+        try:
+            import p4p.client.thread
+            import p4p.nt
+            self._p4p = p4p
+        except ImportError:
+            logging.error("P4P is not installed.")
+            raise ImportError("P4P is not installed. ")
+
+        self._context = self._get_context()
+        self._pv_name = self._device_uri.removeprefix("pva://")
+        _, self._height, self._width, _ = self._get_image(self._pv_name)
+
+        # EPICS uses a worker thread. As the streamer classes launches a forked
+        # `poll_image` proccess with `multiprocessing` to serve the image, the
+        # reference to the context is lost. In order to work around this
+        # situation we need to ensure the context is deleted and then recreate
+        # it after the fork - e.g. in poll_image
+        self._context.disconnect()
+        del self._context
+        self._context = None
+
+    def _get_context(self):
+        try:
+            ctx = self._p4p.client.thread.Context('pva', nt=False)
+            logging.info("Connecting to pva context")
+        except Exception:
+            logging.exception("")
+            logging.info("Could not connect to pva context...")
+            sys.exit(-1)
+        else:
+            return ctx
+
+    def _get_image(self, pv_name: str):
+        data = self._context.get(pv_name)
+
+        # Checking if it is a 3 dimensional image and if the codec is empty -
+        # i.e. the image is uncompressed
+        if (len(data.dimension) == 3 and data.dimension[0].size == 3 and data.codec.name == ""):
+            array_data = self._p4p.nt.NTNDArray.unwrap(data)
+            im = Image.fromarray(array_data)
+            raw_data = im.convert("RGB").tobytes()
+            return raw_data, array_data.shape[0], array_data.shape[1], data
+        else:
+            raise ValueError(
+                "Only uncompressed RGB images are supported, for now")
+
+    def _poll_once(self) -> None:
+        if self._context is None:
+            self._context = self._get_context()
+
+        raw_data, height, width, nt_data = self._get_image(self._pv_name)
+
+        if width != self._width or height != self._height:
+            raise ValueError(
+                f'Image dimensions have changed. \
+                 \n Expected: ({self._width}, {self._height}) \
+                 \n Received: ({width}, {height})')
+
+        self._write_data(bytearray(raw_data))
+
+        timestamp = nt_data.dataTimeStamp.secondsPastEpoch
+        timestamp += nt_data.dataTimeStamp.nanoseconds * 10**-9
+
+        if self._redis:
+            frame_dict = {
+                "data": base64.b64encode(raw_data).decode('utf-8'),
+                "size": (width, height),
+                "time": datetime.fromtimestamp(timestamp).strftime("%H:%M:%S.%f"),
+                "frame_number": nt_data.id,
+            }
+            self._redis_client.publish(
+                self._redis_channel, json.dumps(frame_dict))
+
+        time.sleep(self._sleep_time)
+
+
 class RedisCamera(Camera):
     def __init__(self, device_uri: str, sleep_time: float, debug: bool = False, out_redis: str = None, out_redis_channel: str = None, in_redis_channel: str = 'frames'):
         super().__init__(device_uri, sleep_time, debug, out_redis, out_redis_channel)
