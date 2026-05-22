@@ -368,6 +368,45 @@ dnspython = ">=2.0.0"
 idna = ">=2.0.0"
 
 [[package]]
+name = "epicscorelibs"
+version = "7.0.10.99.0.1"
+description = "The EPICS Core libraries for use by python modules"
+optional = true
+python-versions = ">=2.7"
+groups = ["main"]
+markers = "extra == \"epics\""
+files = [
+    {file = "epicscorelibs-7.0.10.99.0.1-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:4ca3a5f49a31f6e8c1ef8eab0b9d762827a8cced0de9159cb7e1c14730c0322b"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp310-cp310-manylinux2014_x86_64.whl", hash = "sha256:5e3188984ac4765713bedc52e8d47121bc8dfc7d49ed54598d0849c58c70622c"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp310-cp310-win_amd64.whl", hash = "sha256:fa86a42508d13d38785a28ed4b24496a09aa529df7cd148308eb6bfe0b0089c4"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp311-cp311-macosx_11_0_universal2.whl", hash = "sha256:98be3cea1239bc3076cc8e86759b4fa00903123e42c96664215af1063d177f55"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp311-cp311-manylinux2014_x86_64.whl", hash = "sha256:91f112790a31c296bdb2c0f9b661e993c3ded9df9f4731a92887c5abfbaf568a"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp311-cp311-win_amd64.whl", hash = "sha256:9ca9784fd25d362d9248174c55df3f3cd902b7f51fb8cd165b4f1748c713293e"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp312-cp312-macosx_11_0_universal2.whl", hash = "sha256:cbc6457df698f916bec7bd9eb242b280e3e6e4a6a2379da86974a571566d618e"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp312-cp312-manylinux2014_x86_64.whl", hash = "sha256:b7b9cb9dc1b533f6bb569dffe246256ba4d553a5843ddf494645c9b33a38ba2a"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp312-cp312-win_amd64.whl", hash = "sha256:28cc23c97c9ddbe7be67c036b37ecf945923351dec5894c5894afb7883ac099f"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp313-cp313-macosx_11_0_universal2.whl", hash = "sha256:fa350350587b87080a8200554fae2fdbffe92fa0c9fb9e9d68c7d69577070ce8"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp313-cp313-manylinux2014_x86_64.whl", hash = "sha256:8ac0a67067d06c42d4ac83b685f8020d4e993858bc4e36d58631983b1117aa39"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp313-cp313-win_amd64.whl", hash = "sha256:5d22a8fbb26414e613fba77a9422a289fc30b05b32548c79644ef39d04f76743"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp313-cp313t-manylinux2014_x86_64.whl", hash = "sha256:4b2f8228844f73b06412075e50c6787e5d19af6d3ed230c7804b3765f1aa7274"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp314-cp314-macosx_11_0_universal2.whl", hash = "sha256:8d747ad55055a5031630063f24695223f9d983f3389fd0a2133640c6f6f92043"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:7de58f4e8a7dd8edf7b808ffc99391e95ca3516c4f2780258c31f4f844d63239"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp314-cp314-win_amd64.whl", hash = "sha256:5e2f294e60a0b3a50af5c26cda8c62b1ba926742f3a7d562e9ae65432dd16c18"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:045751cdbb9bda21e830bd92753c259d10c8582c2e2bbd3dfa768158a57f541b"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:37fa3a95c3af038600bebef4178e4338376425a330e9c7946477bf9e8e2d86dc"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:93fcd951c17c162130e733f657bdc4939513312843dbc1d1cfaabeef74d1e744"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp38-cp38-win_amd64.whl", hash = "sha256:e9e106daf054fd71eb552e0ea61ddc2673993e19726fa0a365f3c3422ad61917"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp39-cp39-macosx_11_0_universal2.whl", hash = "sha256:1c3970da1407c78576850aa9a3a766d68ee93b62d661c1093ba705a51fa91d4e"},
+    {file = "epicscorelibs-7.0.10.99.0.1-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:3875879563f4c6fd4c597bb55fb48adec107c70306437919dfaca39af486b201"},
+    {file = "epicscorelibs-7.0.10.99.0.1.tar.gz", hash = "sha256:e8c8d9730faef7df55f4d329c359a0e4c044f03a524dd2e4587e90132873edfd"},
+]
+
+[package.dependencies]
+numpy = "*"
+setuptools = "*"
+setuptools-dso = ">=2.11a2"
+
+[[package]]
 name = "exceptiongroup"
 version = "1.3.0"
 description = "Backport of PEP 654 (exception groups)"
@@ -610,18 +649,18 @@ license = ["ukkonen"]
 
 [[package]]
 name = "idna"
-version = "3.10"
+version = "3.16"
 description = "Internationalized Domain Names in Applications (IDNA)"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "idna-3.10-py3-none-any.whl", hash = "sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"},
-    {file = "idna-3.10.tar.gz", hash = "sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9"},
+    {file = "idna-3.16-py3-none-any.whl", hash = "sha256:cc246e3a3f89580c3a951b5ad298ca4638078b2cdd4f115654332b5c26daded5"},
+    {file = "idna-3.16.tar.gz", hash = "sha256:d7a6da03db833450fca25d2358ac9ff06cd624577a4aea3a596d5c0f77b8e03d"},
 ]
 
 [package.extras]
-all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
+all = ["mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
 name = "iniconfig"
@@ -876,6 +915,23 @@ files = [
 ]
 
 [[package]]
+name = "nose2"
+version = "0.16.0"
+description = "unittest with plugins"
+optional = true
+python-versions = ">=3.9"
+groups = ["main"]
+markers = "extra == \"epics\""
+files = [
+    {file = "nose2-0.16.0-py3-none-any.whl", hash = "sha256:a637c508b1fff5882c5f0f573226abe6f43b2f8005fef8896f57174d7d0e0c31"},
+    {file = "nose2-0.16.0.tar.gz", hash = "sha256:19db5ad20e264501a8ee64e3e157a3766a5e744170e54ceecb4e5ca09b08655a"},
+]
+
+[package.extras]
+coverage-plugin = ["coverage"]
+dev = ["sphinx", "sphinx-issues", "sphinx-rtd-theme"]
+
+[[package]]
 name = "numpy"
 version = "1.26.4"
 description = "Fundamental package for array computing in Python"
@@ -944,6 +1000,50 @@ numpy = [
     {version = ">=1.21.4", markers = "python_version == \"3.10\" and platform_system == \"Darwin\""},
     {version = ">=1.21.2", markers = "platform_system != \"Darwin\" and python_version == \"3.10\""},
 ]
+
+[[package]]
+name = "p4p"
+version = "4.2.2"
+description = "Python interface to PVAccess protocol client"
+optional = true
+python-versions = ">=2.7"
+groups = ["main"]
+markers = "extra == \"epics\""
+files = [
+    {file = "p4p-4.2.2-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:35034739b3dd80fda352ff54fd340329254a59ced66710438d4e365d9bb50327"},
+    {file = "p4p-4.2.2-cp310-cp310-manylinux2014_x86_64.whl", hash = "sha256:7cfc916e126213b62fd7cc84ddce7ed42a11e2b7b4f8273a8919841cc06a30df"},
+    {file = "p4p-4.2.2-cp310-cp310-win_amd64.whl", hash = "sha256:8ea3527dbb81ff5aaf1e5aa089fdebf69a14c0e177e2d0213c8bdb3996be8ce0"},
+    {file = "p4p-4.2.2-cp311-cp311-macosx_11_0_universal2.whl", hash = "sha256:a778596f0cd9fd83546d9684523d20923d2ff0aa7300f43a5b591dad704cdff6"},
+    {file = "p4p-4.2.2-cp311-cp311-manylinux2014_x86_64.whl", hash = "sha256:90c2fbcc1adc72cc18194f7287c9c97ac4244e03e9c0b4196a3405c6315f48de"},
+    {file = "p4p-4.2.2-cp311-cp311-win_amd64.whl", hash = "sha256:92e6f9225e24941b5c83062229a21e552d46f59a4246794e1155216da4e58873"},
+    {file = "p4p-4.2.2-cp312-cp312-macosx_11_0_universal2.whl", hash = "sha256:7e614f602e8d1e977afb85a23321d878e3f1131f8e06c385bff270314a6c1814"},
+    {file = "p4p-4.2.2-cp312-cp312-manylinux2014_x86_64.whl", hash = "sha256:a1fbd9c52169e849546dcaf5689a09340bb79ce28eacf4abeff6babf203dac3d"},
+    {file = "p4p-4.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:82dee1207a72a3ea5dbb086c12b8897eb349f594b7855c8bfe1a4e2e5e332704"},
+    {file = "p4p-4.2.2-cp313-cp313-macosx_11_0_universal2.whl", hash = "sha256:1d30d0bb36c1b7e23f5c9cb82723d34621507a3dfd2b53de40c7781c54e42e8d"},
+    {file = "p4p-4.2.2-cp313-cp313-manylinux2014_x86_64.whl", hash = "sha256:106b1dc2c54eaf2d90da6d1fbe2a79dadfb8c796341edaaabe9fedac90246e07"},
+    {file = "p4p-4.2.2-cp313-cp313-win_amd64.whl", hash = "sha256:ef94ae9d56885ce6419816671941bb06f8f6c621d1ebba1cb0d352282d6849a9"},
+    {file = "p4p-4.2.2-cp313-cp313t-manylinux2014_x86_64.whl", hash = "sha256:553a19531a33f49998db0c68b43f86869b139ccb34d01853415ea43696fbbb3d"},
+    {file = "p4p-4.2.2-cp314-cp314-macosx_11_0_universal2.whl", hash = "sha256:61b932ccb4ebf93920dd181907fa2642071be7ae235c1c95088affaae1d258a2"},
+    {file = "p4p-4.2.2-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:31d5a53e68c633a9d791e74950ac0ce9d336809e6a250e9b66fbe60de7e18e0b"},
+    {file = "p4p-4.2.2-cp314-cp314-win_amd64.whl", hash = "sha256:1e8972d75fb7500e4a4fc72beb4136438d84b5fdf89869c5b70171971a143d50"},
+    {file = "p4p-4.2.2-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:11f9e61162380535a5ef074de6f0cd127e65ef3a6399c7cba16115aedf70b8e1"},
+    {file = "p4p-4.2.2-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:67154203416966530c347a5a87a888e4eca029308c96a55d7e89eb4bbdae3af9"},
+    {file = "p4p-4.2.2-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:f1abbc83788d9699fc19319d69d7af4cd0d95bcf5ddc44b5a4fed2cd6c507794"},
+    {file = "p4p-4.2.2-cp38-cp38-win_amd64.whl", hash = "sha256:9876d01bfa7fdb13508ae6f69cc4a67722048350c9b748b7514b57e574a136a5"},
+    {file = "p4p-4.2.2-cp39-cp39-macosx_11_0_universal2.whl", hash = "sha256:a99197a6a2a384b8f27649821d3d41351cf33751ff19ea0ace28811c6314f07f"},
+    {file = "p4p-4.2.2-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:30ecd73bc33c2f645a70e30be752d584a985bd6ac91fecaf2dd3342595c1cd5b"},
+    {file = "p4p-4.2.2.tar.gz", hash = "sha256:1685ffab0d0a1a1e3da647dd9f027933a10d57b71b3c4f5dd762fcabeba7e31e"},
+]
+
+[package.dependencies]
+epicscorelibs = ">=7.0.10.99.0.0,<7.0.10.99.1"
+nose2 = ">=0.8.0"
+numpy = ">=1.7,<3"
+ply = "*"
+pvxslibs = ">=1.5.0,<1.6.0a1"
+
+[package.extras]
+qt = ["qtpy"]
 
 [[package]]
 name = "packaging"
@@ -1113,6 +1213,19 @@ dev = ["pre-commit", "tox"]
 testing = ["coverage", "pytest", "pytest-benchmark"]
 
 [[package]]
+name = "ply"
+version = "3.11"
+description = "Python Lex & Yacc"
+optional = true
+python-versions = "*"
+groups = ["main"]
+markers = "extra == \"epics\""
+files = [
+    {file = "ply-3.11-py2.py3-none-any.whl", hash = "sha256:096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce"},
+    {file = "ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"},
+]
+
+[[package]]
 name = "pre-commit"
 version = "3.5.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
@@ -1155,6 +1268,44 @@ files = [
 [package.extras]
 dev = ["abi3audit", "black (==24.10.0)", "check-manifest", "coverage", "packaging", "pylint", "pyperf", "pypinfo", "pytest", "pytest-cov", "pytest-xdist", "requests", "rstcheck", "ruff", "setuptools", "sphinx", "sphinx_rtd_theme", "toml-sort", "twine", "virtualenv", "vulture", "wheel"]
 test = ["pytest", "pytest-xdist", "setuptools"]
+
+[[package]]
+name = "pvxslibs"
+version = "1.5.1"
+description = "PVXS libraries packaged for python"
+optional = true
+python-versions = ">=2.7"
+groups = ["main"]
+markers = "extra == \"epics\""
+files = [
+    {file = "pvxslibs-1.5.1-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:734b28efd4d5e275466a8fdf9a83eef84f22d73366428fe9925d5523bdb75cff"},
+    {file = "pvxslibs-1.5.1-cp310-cp310-manylinux2014_x86_64.whl", hash = "sha256:c66bc5bf7d2e4c8d08a0c6bfa97d3a7e5e8ccfc8f9090e2efe154d5572ce7b20"},
+    {file = "pvxslibs-1.5.1-cp310-cp310-win_amd64.whl", hash = "sha256:1bd8f291374c3ca57d0b4313dc98f9b44abed0307b66301f9c508e19a1c75b82"},
+    {file = "pvxslibs-1.5.1-cp311-cp311-macosx_11_0_universal2.whl", hash = "sha256:4eba0aa78dfb83390e21d77bbcff905b8093d0e1da7aa2d6382ad92b1278adbe"},
+    {file = "pvxslibs-1.5.1-cp311-cp311-manylinux2014_x86_64.whl", hash = "sha256:b758f9b5aa7e305070864d8f6070b87556aeb11162c2926bcfdca0520703a52c"},
+    {file = "pvxslibs-1.5.1-cp311-cp311-win_amd64.whl", hash = "sha256:c78b0c626318e5e5d6d25a5e0219c07e666cb379abfadfcf4215ecf38beba791"},
+    {file = "pvxslibs-1.5.1-cp312-cp312-macosx_11_0_universal2.whl", hash = "sha256:45c35308fa6f86e0cf3f4d6cfa864df406c0f0fbee94dbe1a9dfd6f1e327eb36"},
+    {file = "pvxslibs-1.5.1-cp312-cp312-manylinux2014_x86_64.whl", hash = "sha256:3e62c75458513e02f03fb6ba198057adeddbd912aa601378f2ddb1c7e75dd73c"},
+    {file = "pvxslibs-1.5.1-cp312-cp312-win_amd64.whl", hash = "sha256:105fe6ac5d1c1c1ad37df68a212b6165ad3165e1250c654fdec5bf576adef913"},
+    {file = "pvxslibs-1.5.1-cp313-cp313-macosx_11_0_universal2.whl", hash = "sha256:4803e3bdce82ad549bb339d2cee7a88f61a80ab303da12fbb007c4b520fbaf54"},
+    {file = "pvxslibs-1.5.1-cp313-cp313-manylinux2014_x86_64.whl", hash = "sha256:b323aeadb0a2aecd91c6bcfcd4c699c0c44356a7953ed0c3b48eb28bb5af418e"},
+    {file = "pvxslibs-1.5.1-cp313-cp313-win_amd64.whl", hash = "sha256:b3fd5ad14037d70b1e06ee145e091db88ca9790f699960f17905d203c6534779"},
+    {file = "pvxslibs-1.5.1-cp313-cp313t-manylinux2014_x86_64.whl", hash = "sha256:0e78ccd4ea2a4e0358c61c0c4b124c2a1ffe5c0fd66f5f9d4e38d36740ab1bba"},
+    {file = "pvxslibs-1.5.1-cp314-cp314-macosx_11_0_universal2.whl", hash = "sha256:cf34022c9f35761ac3759bc9fbbb87d7ec3733e81efa6c9ba37a2f83ae1ee75b"},
+    {file = "pvxslibs-1.5.1-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:891e37e484492ebddf297ffff70308a904c8891ba31685adaee059584f2620fe"},
+    {file = "pvxslibs-1.5.1-cp314-cp314-win_amd64.whl", hash = "sha256:54d7aed1480216de6adc238eb2c641806e6b0dc84838bc44c020b2dd8f21097b"},
+    {file = "pvxslibs-1.5.1-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:1aeaf035509a185a174ecdd6c1428417f41aae6a7ef245c8f7da024590dab41b"},
+    {file = "pvxslibs-1.5.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:3b2741ba17552b5c18c97815702971b9d22d5c22724cd8a976a922f9cb70f89c"},
+    {file = "pvxslibs-1.5.1-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:ffef9ee01e9fef52e71daf95f8441959cbd15576c2b2f945110ce0be0f1645de"},
+    {file = "pvxslibs-1.5.1-cp38-cp38-win_amd64.whl", hash = "sha256:596a59f3328dd7038619a2c196cbd9a95344f0284a59ac17ef82a861ab00816b"},
+    {file = "pvxslibs-1.5.1-cp39-cp39-macosx_11_0_universal2.whl", hash = "sha256:a934d5f02580e15c0e34b532920d86a552ccd3468e2c4f7386bea94f56eebf37"},
+    {file = "pvxslibs-1.5.1-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:5f388e91dc71eaf350c71c0a2e9423168d410d8b502780a704f7fd6d00ae28e4"},
+    {file = "pvxslibs-1.5.1.tar.gz", hash = "sha256:b1d42117521dec526944a32d4052496fccb9a3b3694c484637d650f65e5ebe99"},
+]
+
+[package.dependencies]
+epicscorelibs = ">=7.0.10.99.0.1,<7.0.10.99.1"
+setuptools_dso = ">=2.7a1"
 
 [[package]]
 name = "pydantic"
@@ -1626,6 +1777,44 @@ rich = ">=13.7.1"
 typing-extensions = ">=4.12.2"
 
 [[package]]
+name = "setuptools"
+version = "82.0.1"
+description = "Most extensible Python build backend with support for C/C++ extension modules"
+optional = true
+python-versions = ">=3.9"
+groups = ["main"]
+markers = "extra == \"epics\""
+files = [
+    {file = "setuptools-82.0.1-py3-none-any.whl", hash = "sha256:a59e362652f08dcd477c78bb6e7bd9d80a7995bc73ce773050228a348ce2e5bb"},
+    {file = "setuptools-82.0.1.tar.gz", hash = "sha256:7d872682c5d01cfde07da7bccc7b65469d3dca203318515ada1de5eda35efbf9"},
+]
+
+[package.extras]
+check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1) ; sys_platform != \"cygwin\"", "ruff (>=0.13.0) ; sys_platform != \"cygwin\""]
+core = ["importlib_metadata (>=6) ; python_version < \"3.10\"", "jaraco.functools (>=4)", "jaraco.text (>=3.7)", "more_itertools", "more_itertools (>=8.8)", "packaging (>=24.2)", "tomli (>=2.0.1) ; python_version < \"3.11\"", "wheel (>=0.43.0)"]
+cover = ["pytest-cov"]
+doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier", "towncrier (<24.7)"]
+enabler = ["pytest-enabler (>=2.2)"]
+test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21) ; python_version >= \"3.9\" and sys_platform != \"cygwin\"", "jaraco.envs (>=2.2)", "jaraco.path (>=3.7.2)", "jaraco.test (>=5.5)", "packaging (>=24.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.*)", "pytest-home (>=0.5)", "pytest-perf ; sys_platform != \"cygwin\"", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel (>=0.44.0)"]
+type = ["importlib_metadata (>=7.0.2) ; python_version < \"3.10\"", "jaraco.develop (>=7.21) ; sys_platform != \"cygwin\"", "mypy (==1.18.*)", "pytest-mypy"]
+
+[[package]]
+name = "setuptools-dso"
+version = "2.12.3"
+description = "setuptools extension to build non-python shared libraries"
+optional = true
+python-versions = ">=2.7"
+groups = ["main"]
+markers = "extra == \"epics\""
+files = [
+    {file = "setuptools_dso-2.12.3-py2.py3-none-any.whl", hash = "sha256:5040be8628bd6cb82653391cf59f22126b261941cdbc9c36becca87e09c011c3"},
+    {file = "setuptools_dso-2.12.3.tar.gz", hash = "sha256:9effb7bc38f87ff9aed33cc69e860320804ca6c69af8896dbba10996a49b5d7e"},
+]
+
+[package.dependencies]
+setuptools = "*"
+
+[[package]]
 name = "shellingham"
 version = "1.5.4"
 description = "Tool to Detect Surrounding Shell"
@@ -1804,14 +1993,14 @@ typing-extensions = ">=4.12.0"
 
 [[package]]
 name = "urllib3"
-version = "2.6.3"
+version = "2.7.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4"},
-    {file = "urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed"},
+    {file = "urllib3-2.7.0-py3-none-any.whl", hash = "sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897"},
+    {file = "urllib3-2.7.0.tar.gz", hash = "sha256:231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c"},
 ]
 
 [package.extras]
@@ -2161,9 +2350,10 @@ files = [
 ]
 
 [extras]
+epics = ["p4p"]
 tango = ["pytango"]
 
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "23f1e02c4479b3c8d5a3f08160244c94f87e7222bd397c4bf4d27c643a0f98e3"
+content-hash = "07fac5c4234e13dc521d8eea39b1cdd860deb7d54112dfae266d478883a92d18"
