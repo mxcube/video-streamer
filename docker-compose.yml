@@ -1,6 +1,6 @@
 services:
   video-streamer:
-    image: ghcr.io/mxcube/video-streamer
+    image: ghcr.io/mxcube/video-streamer:${TAG}
     network_mode: host
     volumes:
       - ./example_config.json:/config.json
