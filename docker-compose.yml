@@ -1,0 +1,7 @@
+services:
+  video-streamer:
+    image: ghcr.io/mxcube/video-streamer
+    network_mode: host
+    volumes:
+      - ./example_config.json:/config.json
+    command: -c /config.json -d
