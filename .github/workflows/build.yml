@@ -35,3 +35,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+          tags: ghcr.io/${{ github.repository }}:${{ env.TAG }}
