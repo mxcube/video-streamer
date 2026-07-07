@@ -37,6 +37,9 @@ redis = ">=4.3.5,<5.0.0"
 requests = "^2.33.1"
 typing-extensions = "^4.14.1"
 uvicorn = { version = "^0.34.0", extras = ["standard"] }
+aiortc = "^1.14.0"
+asyncio = "^4.0.0"
+av = "^16"
 
 
 [tool.poetry.group.dev.dependencies]
