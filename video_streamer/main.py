@@ -71,7 +71,7 @@ def parse_args() -> argparse.Namespace:
         "-of",
         "--output-format",
         dest="output_format",
-        help="output format, MPEG1 or MJPEG",
+        help="output format, MPEG1, MJPEG or VP8",
         default="MPEG1",
     )
 
@@ -157,6 +157,15 @@ def parse_args() -> argparse.Namespace:
         default="",
     )
 
+    opt_parser.add_argument(
+        "-ao",
+        "--allowed_origins",
+        nargs="+",
+        dest="allowed_origins",
+        help="Allowed origins for CORS",
+        default=[],
+    )
+
     return opt_parser.parse_args()
 
 
@@ -189,7 +198,8 @@ def run() -> None:
                         "type": args.auth_type,
                         "username": args.username,
                         "password": args.password
-                    })
+                    }),
+                    "allowed_origins": args.allowed_origins
                 }
             }
         }
@@ -202,7 +212,6 @@ def run() -> None:
 
     for uri, source_config in config.sources.items():
         host, port = uri.split(":")
-
         app = create_app(source_config, host, int(port), debug=args.debug)
 
         if app:
