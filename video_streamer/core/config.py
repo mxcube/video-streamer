@@ -1,6 +1,6 @@
 import sys
 
-from typing import Any, Dict, Optional, Union, Tuple
+from typing import Any, Dict, List, Optional, Union, Tuple
 from pathlib import Path
 from pydantic import BaseModel, Field, validate_call, FilePath
 from pydantic_core import ValidationError
@@ -93,6 +93,11 @@ class SourceConfiguration(BaseModel):
     auth_config: AuthenticationConfiguration = Field(
         title="Authentication Configurations",
         default=AuthenticationConfiguration(type=None),
+    )
+    allowed_origins: List[str] = Field(
+        title="Allowed Origins",
+        description="List of allowed origins for CORS",
+        default=[],
     )
 
 class ServerConfiguration(BaseModel):
