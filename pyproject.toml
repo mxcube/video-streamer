@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.12"
+python = ">=3.11,<3.14"
 fastapi = { version = "^0.138.0", extras = ["standard-no-fastapi-cloud-cli"] }
 numpy = ">=1.26.0,<2.0"
 opencv-python = "^4.10.0.84"
@@ -55,7 +55,7 @@ epics = ["p4p"]
 
 [tool.black]
 line-length = 88
-target_version = ["py38"]
+target_version = ["py311"]
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -73,12 +73,12 @@ exclude = '''
 
 [tool.pyright]
 ignore = ["**/typing_extensions.py"]
-pythonVersion = "3.8"
+pythonVersion = "3.11"
 
 [tool.ruff]
 line-length = 88
 indent-width = 4
-target-version = "py38"
+target-version = "py311"
 
 [tool.ruff.lint]
 extend-select = ["B"]
