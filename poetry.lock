@@ -103,18 +103,6 @@ files = [
 ]
 
 [[package]]
-name = "asyncio"
-version = "4.0.0"
-description = "Deprecated backport of asyncio; use the stdlib package instead"
-optional = false
-python-versions = ">=3.4"
-groups = ["main"]
-files = [
-    {file = "asyncio-4.0.0-py3-none-any.whl", hash = "sha256:c1eddb0659231837046809e68103969b2bef8b0400d59cfa6363f6b5ed8cc88b"},
-    {file = "asyncio-4.0.0.tar.gz", hash = "sha256:570cd9e50db83bc1629152d4d0b7558d6451bb1bfd5dfc2e935d96fc2f40329b"},
-]
-
-[[package]]
 name = "av"
 version = "16.1.0"
 description = "Pythonic bindings for FFmpeg's libraries."
@@ -2767,4 +2755,4 @@ tango = ["pytango"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.14"
-content-hash = "38cd17f7558a4189a943078ab54e44edd31cd9ab2b56d2e420685e387c4ce741"
+content-hash = "8c56a9a8a34fbc69019eafe1914a0830838b6ea67511b212697487b47d817c15"
