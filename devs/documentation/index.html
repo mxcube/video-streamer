@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/mxcube/video-streamer/devs/documentation/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Documentation - MXCuBE Video-Streamer</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">MXCuBE Video-Streamer</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../about/" class="nav-link">About</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developers Guidelines</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../contributing/" class="dropdown-item">Contributing</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Usage</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../usage/cameras/" class="dropdown-item">Cameras</a>
+</li>
+                                    
+<li>
+    <a href="../../usage/setup/" class="dropdown-item">Setup</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../faq/" class="nav-link">FAQ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../license/" class="nav-link">License</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../contributing/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../../installation/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#working-with-documentation" class="nav-link">Working with Documentation</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#modifying-the-documentation" class="nav-link">Modifying the Documentation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#test-your-changes-locally" class="nav-link">Test your Changes Locally</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="working-with-documentation">Working with Documentation</h1>
+<p>This documentation is automatically built and published from the contents of the <a href="https://github.com/mxcube/video-streamer">video-streamer</a> repository. Each time the repository’s <code>main</code> branch is updated, documentation is regenerated.</p>
+<p>If you want to modify this documentation, make a pull request to the repository with your suggested changes.</p>
+<h2 id="modifying-the-documentation">Modifying the Documentation</h2>
+<p>In this project, <a href="https://www.mkdocs.org/">MkDocs</a> is used to convert Markdown files into a static website. The core of the documentation is written in Markdown files, located in the <code>docs/</code> folder, while the configuration file (<code>mkdocs.yml</code>) controls how the site is built and customized.</p>
+<h3 id="key-files-in-the-documentation-setup">Key files in the Documentation Setup</h3>
+<ul>
+<li><code>mkdocs.yml</code>: This is the configuration file for MkDocs, found in the repository's root folder. It defines the structure of the documentation site, including navigation, themes, plugins, and other settings. Below you can find an example of <code>mkdocs.yml</code>:</li>
+</ul>
+<pre><code class="language-yaml">site_name: MXCuBE Video-Streamer Documentation
+theme: readthedocs
+plugins:
+  - macros
+nav:
+  - Home: index.md
+  - About: about.md
+  - Installation: installation.md
+  - FAQ: faq.md
+
+</code></pre>
+<ul>
+<li><code>docs/</code> : This folder contains the source Markdown files (<code>.md</code>), which make up the content of the documentation.</li>
+</ul>
+<pre><code>docs/
+├── index.md
+├── about.md
+├── installation.md
+├── faq.md
+└── images/
+
+</code></pre>
+<h3 id="adding-new-content">Adding New Content</h3>
+<p>To add new content to the documentation, create new Markdown files in the <code>docs/</code> folder. Once you add the file, update the <code>mkdocs.yml</code> navigation structure to include it. For example, if you create a <code>tutorial.md</code> file, you would add it to <code>mkdocs.yml</code>:</p>
+<pre><code class="language-yaml">nav:
+  - Home: index.md
+  - Tutorial: tutorial.md
+</code></pre>
+<h3 id="working-with-macros">Working with Macros</h3>
+<p>In this project, we use the mkdocs-macros-plugin to define custom macros. You can define macros in a custom Python script (e.g., <code>docs_config/main.py</code>) and use them throughout the documentation.</p>
+<p>For example, the following macro will include the contents of the LICENSE file:</p>
+<pre><code class="language-python">def read_file_path(path):
+    with open(path, 'r') as file:
+        return file.read()
+</code></pre>
+<p>Then, in the Markdown files, you can use this Macro like this:</p>
+<pre><code class="language-markdown">## License
+
+{{ read_file('LICENSE') }};
+
+</code></pre>
+<hr />
+<h2 id="test-your-changes-locally">Test your Changes Locally</h2>
+<p>Before submitting your changes to the repository, please make sure that they run locally. </p>
+<h3 id="installing-mkdocs">Installing MkDocs</h3>
+<p>Please follow the instructions in the <a href="../../installation/">Installation Guide</a>, it will automatically install <code>mkdocs</code> and all the needed plugins.</p>
+<h3 id="use-the-development-server">Use the Development Server</h3>
+<p><code>MkDocs</code> has an integrated development server that will run per default on <code>http://localhost:8000</code>. To run it navigate to the folder where <code>mkdocs.yml</code> is located and run</p>
+<pre><code class="language-bash">mkdocs serve
+</code></pre>
+<h3 id="build-the-documentation">Build the Documentation</h3>
+<p>To build the static HTML files that make up your documentation, use the following command:</p>
+<pre><code class="language-bash">mkdocs build
+</code></pre>
+<p>This will generate a <code>site/</code> directory in the root of the project, containing the compiled HTML files. You can then upload the contents of the <code>site/</code> folder to a web server or use it for deployment.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
