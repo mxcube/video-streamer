@@ -1,6 +1,6 @@
 [project]
 name = "mxcube_video_streamer"
-version = "1.9.1"
+version = "1.10.0"
 description = "FastAPI Based video streamer"
 authors = [
     { name = "Marcus Oskarsson", email = "oscarsso@esrf.fr" },
