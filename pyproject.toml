@@ -23,7 +23,7 @@ classifiers = [
 ]
 dependencies = [
     "fastapi[standard-no-fastapi-cloud-cli]>=0.138.0,<0.139.0",
-    "numpy>=1.26.0,<2.0",
+    "numpy>=1.26.0,<3.0",
     "opencv-python>=4.10.0.84,<5.0.0.0",
     "pillow (>=13.0.0,<14.0.0)",
     "pydantic>=2.13,<3.0",
@@ -38,7 +38,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-tango = ["pytango>=9.3.6,<10.0.0"]
+tango = ["pytango>=9.3.6,<11.0.0"]
 epics = ["p4p>=4.2.2,<5.0.0"]
 
 [project.urls]
