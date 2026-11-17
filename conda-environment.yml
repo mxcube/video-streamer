@@ -5,4 +5,4 @@ dependencies:
   - ffmpeg
   - pip
   - poetry
-  - python >=3.11,<3.14
+  - python >=3.11,<3.15
