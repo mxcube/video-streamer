@@ -11,7 +11,7 @@ maintainers = [
 ]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11,<3.15"
 keywords = ["mxcube", "fast-api-streamer", "video_streamer", "mxcubeweb"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",

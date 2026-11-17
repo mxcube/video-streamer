@@ -14,6 +14,8 @@ import numpy as np
 from video_streamer.core.camera import TestCamera, LimaCamera, MJPEGCamera, VideoTestCamera, Camera, RedisCamera, EpicsPVACamera
 from video_streamer.core.config import SourceConfiguration
 
+_mp_context = multiprocessing.get_context("fork")
+
 
 class Streamer:
     def __init__(self, config: SourceConfiguration, host: str, port: int, debug: bool):
@@ -53,9 +55,9 @@ class MJPEGStreamer(Streamer):
         self._camera = self.get_camera()
 
     def start(self) -> Generator[bytes, Any, Any]:
-        _q = multiprocessing.Queue(1)
+        _q = _mp_context.Queue(1)
 
-        self._poll_image_p = multiprocessing.Process(
+        self._poll_image_p = _mp_context.Process(
             target=self._camera.poll_image, args=(_q,)
         )
         self._poll_image_p.start()
@@ -169,7 +171,7 @@ class FFMPGStreamer(Streamer):
             camera.size, out_size, self._config.quality, self._config.v_flip, self._port
         )
 
-        self._poll_image_p = multiprocessing.Process(
+        self._poll_image_p = _mp_context.Process(
             target=camera.poll_image, args=(ffmpeg_p.stdin,)
         )
 
@@ -218,8 +220,8 @@ class VideoMediaStreamer(Streamer):
     def start(self) -> MediaStreamTrack:
         camera = self.get_camera()
 
-        _q = multiprocessing.Queue(1)
-        self._poll_image_p = multiprocessing.Process(
+        _q = _mp_context.Queue(1)
+        self._poll_image_p = _mp_context.Process(
             target=camera.poll_image, args=(_q,)
         )
         self._poll_image_p.start()
